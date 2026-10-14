@@ -1,0 +1,75 @@
+{
+  "run_id": "20261014T025713Z-replay-db2219",
+  "capability": "corebank.member.get_savings_balance@1.0.0",
+  "tenant": "cu-alpha",
+  "tenant_overrides": [],
+  "status": "succeeded",
+  "outputs": {
+    "savings_balance": {
+      "redacted": true,
+      "sensitivity": "confidential",
+      "fingerprint": "hmac:fe186af2fd5537f9"
+    }
+  },
+  "recoveries": [],
+  "drift": [
+    {
+      "kind": "locator_fallback",
+      "step_id": "click_button_search",
+      "detail": "primary locator failed; resolved via 'css' (attempts: [{'strategy': 'role', 'description': 'button \"Find\"', 'matches': 0, 'error': None}, {'strategy': 'css', 'description': 'css `body > form:nth-of-type(1) > table:nth-of-type(1) > tbody:nth-of-type(1) > tr:nth-of-type(1) > td:nth-of-type(3) > input:nth-of-type(1)`', 'matches': 1, 'error': None}])"
+    }
+  ],
+  "interventions": [],
+  "steps": [
+    {
+      "id": "click_link_member_inquiry",
+      "title": "Click link Member Inquiry",
+      "status": "ok",
+      "risk": "read",
+      "strategy": "role",
+      "duration_ms": 396,
+      "screenshot": "0007-step-click_link_member_inquiry.png"
+    },
+    {
+      "id": "fill_textbox_member_number",
+      "title": "Enter textbox Member Number",
+      "status": "ok",
+      "risk": "read",
+      "strategy": "label",
+      "duration_ms": 377,
+      "screenshot": "0009-step-fill_textbox_member_number.png"
+    },
+    {
+      "id": "click_button_search",
+      "title": "Click button Search",
+      "status": "ok",
+      "risk": "read",
+      "strategy": "css",
+      "duration_ms": 447,
+      "screenshot": "0012-step-click_button_search.png"
+    },
+    {
+      "id": "click_link_view",
+      "title": "Click link View",
+      "status": "ok",
+      "risk": "read",
+      "strategy": "role",
+      "duration_ms": 453,
+      "screenshot": "0014-step-click_link_view.png"
+    },
+    {
+      "id": "extract_savings_balance",
+      "title": "Read savings balance",
+      "status": "ok",
+      "risk": "read",
+      "strategy": "table_cell",
+      "duration_ms": 385,
+      "screenshot": "0017-step-extract_savings_balance.png"
+    }
+  ],
+  "human_assisted": false,
+  "app_version": "4.2.1",
+  "started_at": "2026-10-14T02:57:13.927712Z",
+  "duration_ms": 3520,
+  "evidence_dir": "runs/20261014T025713Z-replay-db2219"
+}

@@ -1,0 +1,15 @@
+{
+  "run_id": "20261014T024912Z-discovery-8233a7",
+  "mode": "discovery",
+  "status": "completed",
+  "reason": "New sub-account opened for member [param:member_id] with confirmation number CB-48219",
+  "turns": 13,
+  "usage": {
+    "input_tokens": 24501,
+    "output_tokens": 6489
+  },
+  "model": "qwen3:8b",
+  "artifact": "capabilities/meridian_corebank/corebank.member.open_share_account.yaml",
+  "steps_recorded": 12,
+  "human_assisted": true
+}

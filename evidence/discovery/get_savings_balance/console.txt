@@ -1,0 +1,10 @@
+$ cua discover requests/get_savings_balance.yaml -t cu-alpha --escalation-timeout 180
+discovery corebank.member.get_savings_balance on cu-alpha with ollama:qwen3:8b
+─────────────────────────── COMPLETED after 6 turns ────────────────────────────
+reason:   Primary savings balance extracted for member 
+run:      20261014T024657Z-discovery-d38518
+usage:    {'input_tokens': 10491, 'output_tokens': 2054}
+artifact: 
+capabilities/meridian_corebank/corebank
+.member.get_savings_balance.yaml
+[exit 0]

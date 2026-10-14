@@ -1,0 +1,18 @@
+$ cua replay evidence/inputs/open_share_account.approved.yaml -p member_id=100591 -p "share_type=Holiday Club" -p "nickname=Ski Trip" -p initial_deposit=75 --escalation-timeout 180
+───────── FAILED corebank.member.open_share_account@1.0.0 on cu-alpha ──────────
+ run                     20261014T025802Z-replay-b9c471                         
+ duration                5915 ms                                                
+ app version             4.2.1                                                  
+ failure                 OUTCOME_UNKNOWN (application, retryable=False)         
+ message                 application error after a state-changing action - the  
+                         transaction may or may not have been committed; verify 
+                         before retrying                                        
+ step                    #10 click_button_submit - None                         
+   evidence.screenshot   0028-failure-click_button_submit.png                   
+   evidence.dom          ['dom-failure-click_button_submit/frame-0-top.html',   
+                         'dom-failure-click_button_submit/frame-1-banner.html', 
+                         'dom-failure-click_button_submit/frame-2-nav.html',    
+                         'dom-failure-click_button_submit/frame-3-main.html']   
+   evidence.observation  observation-failure-click_button_submit.txt            
+ evidence                runs/20261014T025802Z-replay-b9c471
+[exit 1]

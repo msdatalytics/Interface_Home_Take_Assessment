@@ -1,0 +1,63 @@
+{
+  "run_id": "20261014T025635Z-replay-925b3c",
+  "capability": "corebank.member.get_savings_balance@1.0.0",
+  "digest": "sha256:4ffabffc6ca5411deb88820d321236ef46501f71be53e9e75f8832d2d49a6d1e",
+  "tenant": "cu-beta",
+  "tenant_overrides": [
+    "cu-beta auto-opens a single search result (no results list)"
+  ],
+  "status": "succeeded",
+  "outputs": {
+    "savings_balance": {
+      "redacted": true,
+      "sensitivity": "confidential",
+      "fingerprint": "hmac:4d1b69b308ed76d9"
+    }
+  },
+  "recoveries": [],
+  "drift": [],
+  "interventions": [],
+  "steps": [
+    {
+      "id": "click_link_member_inquiry",
+      "title": "Click link Member Inquiry",
+      "status": "ok",
+      "risk": "read",
+      "strategy": "role",
+      "duration_ms": 404,
+      "screenshot": "0007-step-click_link_member_inquiry.png"
+    },
+    {
+      "id": "fill_textbox_member_number",
+      "title": "Enter textbox Member Number",
+      "status": "ok",
+      "risk": "read",
+      "strategy": "label",
+      "duration_ms": 371,
+      "screenshot": "0009-step-fill_textbox_member_number.png"
+    },
+    {
+      "id": "click_button_search",
+      "title": "Click button Search",
+      "status": "ok",
+      "risk": "read",
+      "strategy": "role",
+      "duration_ms": 453,
+      "screenshot": "0011-step-click_button_search.png"
+    },
+    {
+      "id": "extract_savings_balance",
+      "title": "Read savings balance",
+      "status": "ok",
+      "risk": "read",
+      "strategy": "table_cell",
+      "duration_ms": 367,
+      "screenshot": "0014-step-extract_savings_balance.png"
+    }
+  ],
+  "human_assisted": false,
+  "app_version": "4.3.0",
+  "started_at": "2026-10-14T02:56:35.934052Z",
+  "duration_ms": 3054,
+  "evidence_dir": "runs/20261014T025635Z-replay-925b3c"
+}

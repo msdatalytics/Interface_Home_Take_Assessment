@@ -1,0 +1,49 @@
+# Irreversible workflow: discovery pauses for human approval before the final "Submit",
+# and the resulting artifact cannot run unattended until a reviewer approves its digest.
+apiVersion: cua.dev/v1
+kind: DiscoveryRequest
+metadata:
+  name: corebank.member.open_share_account
+  version: 1.0.0
+  title: Open a new share (sub-account) for a member
+  description: >-
+    Open a new share sub-account of the requested type for an existing member, funded by a
+    cash deposit, and return the confirmation number issued by the core.
+  tags: [member, account-opening, irreversible]
+spec:
+  app: meridian_corebank
+  goal: >-
+    For the member whose member number is {member_id}, open a new sub-account of type
+    {share_type} with nickname {nickname}, funded by a cash deposit of {initial_deposit}.
+    Review the details, submit the request, and read the confirmation number shown on the
+    final confirmation screen.
+  inputs:
+    - name: member_id
+      type: string
+      description: Member number as issued by the credit union.
+      sensitivity: pii
+      pattern: "^[0-9]+$"
+    - name: share_type
+      type: enum
+      description: Product type of the new share.
+      enum: [Regular Savings, Holiday Club, Vacation Club, Money Market]
+    - name: nickname
+      type: string
+      description: Member-facing nickname for the share (letters, digits and spaces).
+      max_length: 20
+      pattern: "^[A-Za-z0-9 ]+$"
+      example: Summer Trip
+    - name: initial_deposit
+      type: money
+      description: Opening cash deposit in USD.
+      example: "250.00"
+  outputs:
+    - name: confirmation_number
+      type: string
+      description: Confirmation number issued by the core for the new share.
+  values:
+    member_id: "100591"
+    share_type: Vacation Club
+    nickname: Summer Trip
+    initial_deposit: "250.00"
+  max_steps: 25

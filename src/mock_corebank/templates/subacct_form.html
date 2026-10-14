@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block body %}
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr><td class="ttl"><font size="3"><b>Open Sub-Account</b></font></td></tr>
+</table>
+<br>
+Member: <b>{{ member.member_number }}</b>
+<br><br>
+{% for e in errors %}
+<font color="red"><b>*** {{ e }} ***</b></font><br>
+{% endfor %}
+<form name="aspnetForm" method="post" action="subacct_new.asp?m={{ member.member_number }}&amp;sid={{ sid }}">
+<table border="0" cellpadding="3" cellspacing="0">
+  <tr>
+    <td class="lbl">Share Type:</td>
+    <td><select name="{{ p }}$ddlType">
+      <option value="">-- Select --</option>
+      {% for code, label in share_types.items() %}
+      <option value="{{ code }}" {% if values.share_type == code %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select></td>
+  </tr>
+  <tr>
+    <td class="lbl">Nickname:</td>
+    <td><input type="text" name="{{ p }}$txtNick" size="22" maxlength="30" value="{{ values.nickname or '' }}"></td>
+  </tr>
+  <tr>
+    <td class="lbl">Initial Deposit:</td>
+    <td><input type="text" name="{{ p }}$txtDep" size="12" value="{{ values.deposit or '' }}"></td>
+  </tr>
+  <tr>
+    <td class="lbl">Funding Source:</td>
+    <td><select name="{{ p }}$ddlFund">
+      <option value="">-- Select --</option>
+      {% for code, label in funding_options %}
+      <option value="{{ code }}" {% if values.funding == code %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>
+      <input type="submit" class="btn" value="Continue" name="{{ p }}$btnCont">
+      <input type="button" class="btn" value="Cancel" onclick="location.href='mbr_detail.asp?m={{ member.member_number }}&sid={{ sid }}'">
+    </td>
+  </tr>
+</table>
+</form>
+{% endblock %}

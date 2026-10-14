@@ -1,0 +1,8 @@
+$ cua replay corebank.member.get_savings_balance -p member_id=12AB --escalation-timeout 180
+───────── FAILED corebank.member.get_savings_balance@1.0.0 on cu-alpha ─────────
+ run       20261014T025649Z-replay-a82d99          
+ duration  0 ms                                    
+ failure   INPUT_INVALID (caller, retryable=False) 
+ message   member_id: must match /^[0-9]+$/        
+ evidence  runs/20261014T025649Z-replay-a82d99
+[exit 1]

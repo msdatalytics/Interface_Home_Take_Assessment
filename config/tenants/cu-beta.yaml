@@ -1,0 +1,39 @@
+# Same vendor product as cu-alpha, configured differently (v4.3, relabelled fields, and
+# "auto-open single search result" enabled). One shared capability + this overlay - no re-recording.
+apiVersion: cua.dev/v1
+kind: Tenant
+metadata:
+  name: cu-beta
+  display_name: Lakeshore Federal Credit Union
+spec:
+  apps:
+    meridian_corebank:
+      base_url: http://127.0.0.1:8402
+      expected_version: 4.3.0
+      secrets:
+        corebank.username: CU_BETA_COREBANK_USERNAME
+        corebank.password: CU_BETA_COREBANK_PASSWORD
+      # Canonical UI term (as recorded) -> this tenant's label. Applies to every capability.
+      vocabulary:
+        Member Number: Account Number
+        Search: Find Member
+        Balance: Current Balance
+        Primary Savings: Share Savings
+      # Lakeshore enabled "auto-open single search result": a member-number search lands
+      # directly on the member summary, so the results-list hop does not exist here.
+      overrides:
+        - capability: corebank.member.get_savings_balance
+          versions: ">=1.0.0,<2"
+          reason: cu-beta auto-opens a single search result (no results list)
+          patches:
+            - op: replace
+              path: /spec/steps/@click_button_search/expect
+              value:
+                kind: all_of
+                conditions:
+                  - {kind: text_visible, text: Member Account Summary, frame: {name: main}}
+            - op: remove
+              path: /spec/steps/@click_link_view
+            - op: replace
+              path: /spec/success
+              value: {kind: text_visible, text: Member Account Summary, frame: {name: main}}

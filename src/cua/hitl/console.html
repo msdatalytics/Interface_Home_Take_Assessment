@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>cua · operator console</title>
+<style>
+  :root { --bg:#0f1419; --panel:#161d26; --line:#263241; --text:#d7e0ea; --muted:#8193a8; --accent:#4aa3ff; --warn:#f5a524; --ok:#3ccf91; --bad:#f2545b; }
+  * { box-sizing: border-box; }
+  body { margin:0; font: 13px/1.45 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; background:var(--bg); color:var(--text); }
+  header { display:flex; align-items:center; gap:16px; padding:10px 18px; border-bottom:1px solid var(--line); background:var(--panel); }
+  header h1 { font-size:15px; margin:0; }
+  .pill { padding:2px 8px; border-radius:99px; font-size:11px; border:1px solid var(--line); }
+  .automation { color:var(--ok); border-color:var(--ok); } .human { color:var(--warn); border-color:var(--warn); }
+  main { display:grid; grid-template-columns: 320px 1fr; height: calc(100vh - 48px); }
+  aside { border-right:1px solid var(--line); overflow:auto; }
+  .iv { padding:10px 14px; border-bottom:1px solid var(--line); cursor:pointer; }
+  .iv:hover, .iv.sel { background:#1c2531; }
+  .iv .k { font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); }
+  .iv .s-open { color:var(--warn); } .iv .s-claimed { color:var(--accent); } .iv .s-resolved { color:var(--ok); } .iv .s-expired { color:var(--bad); }
+  section { overflow:auto; padding:16px 20px; }
+  h2 { font-size:14px; margin:0 0 6px; }
+  .grid { display:grid; grid-template-columns: 1fr 1fr; gap:14px; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:12px; }
+  pre { white-space:pre-wrap; word-break:break-word; font: 11.5px/1.4 ui-monospace, Menlo, monospace; margin:0; max-height:340px; overflow:auto; }
+  button { background:#22303f; color:var(--text); border:1px solid var(--line); border-radius:6px; padding:6px 10px; cursor:pointer; }
+  button.primary { background:var(--accent); color:#04121f; border-color:var(--accent); }
+  button.danger { border-color:var(--bad); color:var(--bad); }
+  button:disabled { opacity:.4; cursor:not-allowed; }
+  input, textarea { background:#0b1016; color:var(--text); border:1px solid var(--line); border-radius:6px; padding:6px 8px; }
+  #live { width:100%; border:1px solid var(--line); border-radius:6px; cursor:crosshair; }
+  .row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:8px 0; }
+  .muted { color:var(--muted); }
+  table.kv td { padding:2px 8px 2px 0; vertical-align:top; } table.kv td:first-child { color:var(--muted); white-space:nowrap; }
+</style>
+</head>
+<body>
+<header>
+  <h1>cua · operator console</h1>
+  <span id="lease" class="pill">…</span>
+  <span class="muted">operator</span><input id="op" value="ops.analyst" size="14">
+  <span class="muted" style="margin-left:auto">Live view is unmasked and never persisted. All input is recorded.</span>
+</header>
+<main>
+  <aside id="list"></aside>
+  <section id="detail"><p class="muted">No intervention selected.</p></section>
+</main>
+<script>
+const $ = (s) => document.querySelector(s);
+const op = () => $("#op").value.trim();
+let selected = location.pathname.startsWith("/interventions/") ? location.pathname.split("/").pop() : null;
+let state = { interventions: [], lease: {} };
+let liveTimer = null;
+
+async function api(path, opts = {}) {
+  const r = await fetch(path, { headers: { "Content-Type": "application/json" }, ...opts });
+  if (!r.ok) { const t = await r.text(); alert(`${r.status}: ${t}`); throw new Error(t); }
+  return r.json();
+}
+
+async function refresh() {
+  state = await api("/api/state");
+  const l = state.lease;
+  $("#lease").className = "pill " + l.holder;
+  $("#lease").textContent = `control: ${l.holder}${l.operator ? " (" + l.operator + ")" : ""} · epoch ${l.epoch}`;
+  $("#list").innerHTML = state.interventions.map((iv) => `
+    <div class="iv ${iv.id === selected ? "sel" : ""}" onclick="select('${iv.id}')">
+      <div class="k">${iv.kind} · <span class="s-${iv.status}">${iv.status}</span></div>
+      <div>${escapeHtml(iv.reason).slice(0, 140)}</div>
+      <div class="muted">${iv.id} · ${new Date(iv.created_at).toLocaleTimeString()}</div>
+    </div>`).join("") || `<p class="muted" style="padding:14px">No interventions yet.</p>`;
+  if (!selected && state.interventions.length) selected = state.interventions[0].id;
+  renderDetail();
+}
+
+function select(id) { selected = id; history.replaceState(null, "", "/interventions/" + id); refresh(); }
+function escapeHtml(s) { return String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+
+function renderDetail() {
+  const iv = state.interventions.find((i) => i.id === selected);
+  if (!iv) return;
+  const mine = state.lease.holder === "human" && state.lease.operator === op() && state.lease.intervention === iv.id;
+  const ctx = iv.context || {};
+  const active = iv.status === "open" || iv.status === "claimed";
+  const actions = iv.allowed.map((a) => `<button ${active ? "" : "disabled"} class="${a === "abort" || a === "reject" ? "danger" : "primary"}" onclick="resolveIv('${iv.id}','${a}')">${a.replace("_", " ")}</button>`).join(" ");
+  if ($("#detail").dataset.iv === iv.id && $("#detail").dataset.mine === String(mine) && $("#detail").dataset.status === iv.status) return;
+  $("#detail").dataset.iv = iv.id; $("#detail").dataset.mine = String(mine); $("#detail").dataset.status = iv.status;
+  $("#detail").innerHTML = `
+    <h2>${iv.kind.toUpperCase()} — ${escapeHtml(iv.reason)}</h2>
+    <div class="row">
+      <button ${iv.status === "open" ? "" : "disabled"} onclick="claim('${iv.id}')">Take control of live session</button>
+      ${actions}
+      <input id="note" placeholder="note for the record / agent" size="40">
+    </div>
+    <div class="grid">
+      <div class="card">
+        <table class="kv">
+          ${["capability", "goal", "tenant", "step_id", "step_title", "step_action", "target", "expected", "location"].filter((k) => ctx[k]).map((k) => `<tr><td>${k}</td><td>${escapeHtml(ctx[k])}</td></tr>`).join("")}
+          <tr><td>status</td><td>${iv.status}${iv.operator ? " · " + escapeHtml(iv.operator) : ""}${iv.resolution ? " · " + iv.resolution : ""}</td></tr>
+        </table>
+        ${ctx.failure ? `<h2 style="margin-top:10px">Failure</h2><pre>${escapeHtml(JSON.stringify(ctx.failure, null, 2))}</pre>` : ""}
+      </div>
+      <div class="card">
+        <h2>${mine ? "Live session (you have control)" : "Snapshot at escalation (masked)"}</h2>
+        ${mine ? `<img id="live" onclick="clickLive(event)">` : (ctx.screenshot ? `<p class="muted">${escapeHtml(ctx.screenshot)} (in run evidence)</p>` : "")}
+        ${mine ? `<div class="row"><input id="typed" placeholder="type into focused field"><button onclick="typeText()">Type</button>
+          <button onclick="key('Enter')">Enter</button><button onclick="key('Tab')">Tab</button><button onclick="key('Escape')">Esc</button></div>` : ""}
+      </div>
+    </div>
+    <div class="grid" style="margin-top:14px">
+      <div class="card"><h2>Screen (semantic, redacted)</h2><pre id="obs">${escapeHtml(ctx.observation || "")}</pre></div>
+      <div class="card"><h2>Recorded human actions (${iv.human_actions.length})</h2><pre>${escapeHtml(iv.human_actions.map((a) => JSON.stringify(a)).join("\n"))}</pre></div>
+    </div>`;
+  clearInterval(liveTimer);
+  if (mine) { liveTimer = setInterval(updateLive, 1000); updateLive(); }
+}
+
+async function updateLive() {
+  const img = $("#live"); if (!img) return;
+  img.src = `/api/session/screen.png?operator=${encodeURIComponent(op())}&t=${Date.now()}`;
+  const r = await fetch(`/api/session/observation?operator=${encodeURIComponent(op())}`);
+  if (r.ok) $("#obs").textContent = (await r.json()).screen;
+}
+async function claim(id) { await api(`/api/interventions/${id}/claim`, { method: "POST", body: JSON.stringify({ operator: op() }) }); $("#detail").dataset.iv = ""; refresh(); }
+async function resolveIv(id, resolution) { await api(`/api/interventions/${id}/resolve`, { method: "POST", body: JSON.stringify({ operator: op(), resolution, note: ($("#note") || {}).value || null }) }); $("#detail").dataset.iv = ""; refresh(); }
+async function input(body) { await api("/api/session/input", { method: "POST", body: JSON.stringify({ operator: op(), ...body }) }); updateLive(); }
+function clickLive(ev) { const img = ev.target; const sx = img.naturalWidth / img.clientWidth, sy = img.naturalHeight / img.clientHeight; input({ kind: "click_xy", x: ev.offsetX * sx, y: ev.offsetY * sy }); }
+function typeText() { input({ kind: "type", text: $("#typed").value }); $("#typed").value = ""; }
+function key(k) { input({ kind: "key", key: k }); }
+
+refresh(); setInterval(refresh, 2000);
+</script>
+</body>
+</html>

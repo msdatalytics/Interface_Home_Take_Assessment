@@ -1,0 +1,392 @@
+# Capability recorded by LLM discovery run 20261014T024912Z-discovery-8233a7.
+# Status: draft - review targets/risk before `cua approve`.
+apiVersion: cua.dev/v1
+kind: Capability
+metadata:
+  name: corebank.member.open_share_account
+  title: Open a new share (sub-account) for a member
+  version: 1.0.0
+  description: Open a new share sub-account of the requested type for an existing member, funded by a cash deposit, and return the confirmation number issued by the
+    core.
+  app: meridian_corebank
+  app_versions: '>=4.2,<5'
+  status: draft
+  approvals: []
+  tags:
+    - member
+    - account-opening
+    - irreversible
+  provenance:
+    method: llm_discovery
+    run_id: 20261014T024912Z-discovery-8233a7
+    recorded_at: '2026-10-14T02:55:51Z'
+    recorded_on_tenant: cu-alpha
+    recorded_on_app_version: 4.2.1
+    model: ollama:qwen3:8b
+    goal: For the member whose member number is {member_id}, open a new sub-account of type {share_type} with nickname {nickname}, funded by a cash deposit of {initial_deposit}.
+      Review the details, submit the request, and read the confirmation number shown on the final confirmation screen.
+    human_assisted: true
+  digest: sha256:d559eff9c55eb9856e881e0ba66a6b559f4830574b5ce0d5fd6b7d65b71510ce
+spec:
+  inputs:
+    - name: member_id
+      type: string
+      description: Member number as issued by the credit union.
+      required: true
+      sensitivity: pii
+      pattern: ^[0-9]+$
+    - name: share_type
+      type: enum
+      description: Product type of the new share.
+      required: true
+      sensitivity: internal
+      enum:
+        - Regular Savings
+        - Holiday Club
+        - Vacation Club
+        - Money Market
+    - name: nickname
+      type: string
+      description: Member-facing nickname for the share (letters, digits and spaces).
+      required: true
+      sensitivity: internal
+      pattern: ^[A-Za-z0-9 ]+$
+      max_length: 20
+      example: Summer Trip
+    - name: initial_deposit
+      type: money
+      description: Opening cash deposit in USD.
+      required: true
+      sensitivity: internal
+      example: '250.00'
+  outputs:
+    - name: confirmation_number
+      type: string
+      description: Confirmation number issued by the core for the new share.
+      sensitivity: internal
+      required: true
+  outcomes:
+    - code: record_not_found
+      description: No member matches the supplied member number.
+      detect:
+        kind: text_visible
+        text: No records found matching the search criteria
+        frame:
+          name: main
+      retryable: false
+    - code: access_denied
+      description: The signed-on user lacks privilege for this record (e.g. restricted employee accounts).
+      detect:
+        kind: text_visible
+        pattern: ACCESS DENIED \(SEC-403\)
+        frame:
+          name: main
+      retryable: false
+    - code: validation_error
+      description: The application rejected an input; the message carries the application's reason.
+      detect:
+        kind: text_visible
+        pattern: \*\*\* (?P<message>[^*]+?) \*\*\*
+        frame:
+          name: main
+      retryable: false
+    - code: duplicate_request
+      description: The application already processed this request (idempotency guard).
+      detect:
+        kind: text_visible
+        text: This request has already been processed
+        frame:
+          name: main
+      retryable: false
+  entry:
+    requires_session: true
+  steps:
+    - id: click_link_sub_account_maintenance
+      action: click
+      title: Click link Sub-Account Maintenance
+      risk: read
+      target:
+        description: link Sub-Account Maintenance
+        frame:
+          name: nav
+        locators:
+          - strategy: role
+            name: Sub-Account Maintenance
+            role: link
+          - strategy: text
+            text: Sub-Account Maintenance
+          - strategy: css
+            selector: body > table:nth-of-type(1) > tbody:nth-of-type(1) > tr:nth-of-type(3) > td:nth-of-type(1) > a:nth-of-type(1)
+      expect:
+        kind: all_of
+        conditions:
+          - kind: url_matches
+            path: /cb/mbr_search.asp
+            frame:
+              name: main
+          - kind: text_visible
+            text: Member Inquiry
+            frame:
+              name: main
+      timeout_ms: 15000
+      source: llm
+      rationale: Navigate to sub-account maintenance to open a new share.
+    - id: fill_textbox_member_number
+      action: fill
+      title: Enter textbox Member Number
+      risk: read
+      target:
+        description: textbox Member Number
+        frame:
+          name: main
+        locators:
+          - strategy: label
+            label: 'Member Number:'
+            role: textbox
+          - strategy: css
+            selector: input[name="ctl00$cph$txtMbrNo"]
+      value:
+        param: member_id
+      timeout_ms: 15000
+      source: llm
+      rationale: Enter the member number to search for the member.
+    - id: click_button_search
+      action: click
+      title: Click button Search
+      risk: read
+      target:
+        description: button Search
+        frame:
+          name: main
+        locators:
+          - strategy: role
+            name: Search
+            role: button
+          - strategy: css
+            selector: body > form:nth-of-type(1) > table:nth-of-type(1) > tbody:nth-of-type(1) > tr:nth-of-type(1) > td:nth-of-type(3) > input:nth-of-type(1)
+      expect:
+        kind: text_visible
+        text: 'Member #'
+        frame:
+          name: main
+      timeout_ms: 15000
+      source: llm
+      rationale: Initiate member search to proceed with sub-account creation.
+    - id: click_link_view
+      action: click
+      title: Click link View
+      risk: read
+      target:
+        description: link View
+        frame:
+          name: main
+        locators:
+          - strategy: role
+            name: View
+            role: link
+          - strategy: text
+            text: View
+          - strategy: css
+            selector: body > table:nth-of-type(2) > tbody:nth-of-type(1) > tr:nth-of-type(2) > td:nth-of-type(4) > a:nth-of-type(1)
+      expect:
+        kind: all_of
+        conditions:
+          - kind: url_matches
+            path: /cb/mbr_detail.asp
+            frame:
+              name: main
+          - kind: text_visible
+            text: Member Account Summary
+            frame:
+              name: main
+      timeout_ms: 15000
+      source: llm
+      rationale: Navigate to the member's details to proceed with opening the sub-account.
+    - id: click_button_open_sub_account
+      action: click
+      title: Click button Open Sub-Account
+      risk: read
+      target:
+        description: button Open Sub-Account
+        frame:
+          name: main
+        locators:
+          - strategy: role
+            name: Open Sub-Account
+            role: button
+          - strategy: css
+            selector: body > input:nth-of-type(1)
+      expect:
+        kind: all_of
+        conditions:
+          - kind: url_matches
+            path: /cb/subacct_new.asp
+            frame:
+              name: main
+          - kind: text_visible
+            text: Open Sub-Account
+            frame:
+              name: main
+      timeout_ms: 15000
+      source: llm
+      rationale: Initiate sub-account opening process for the member.
+    - id: select_combobox_share_type
+      action: select
+      title: Choose combobox Share Type
+      risk: read
+      target:
+        description: combobox Share Type
+        frame:
+          name: main
+        locators:
+          - strategy: label
+            label: 'Share Type:'
+            role: combobox
+          - strategy: css
+            selector: select[name="ctl00$cph$ddlType"]
+      option:
+        param: share_type
+      timeout_ms: 15000
+      source: llm
+      rationale: Select the share type from the dropdown.
+    - id: fill_textbox_nickname
+      action: fill
+      title: Enter textbox Nickname
+      risk: read
+      target:
+        description: textbox Nickname
+        frame:
+          name: main
+        locators:
+          - strategy: label
+            label: 'Nickname:'
+            role: textbox
+          - strategy: css
+            selector: input[name="ctl00$cph$txtNick"]
+      value:
+        param: nickname
+      timeout_ms: 15000
+      source: llm
+      rationale: Enter the member-facing nickname for the share.
+    - id: fill_textbox_initial_deposit
+      action: fill
+      title: Enter textbox Initial Deposit
+      risk: read
+      target:
+        description: textbox Initial Deposit
+        frame:
+          name: main
+        locators:
+          - strategy: label
+            label: 'Initial Deposit:'
+            role: textbox
+          - strategy: css
+            selector: input[name="ctl00$cph$txtDep"]
+      value:
+        param: initial_deposit
+      timeout_ms: 15000
+      source: llm
+      rationale: Enter the initial deposit amount for the sub-account.
+    - id: select_combobox_funding_source
+      action: select
+      title: Choose combobox Funding Source
+      risk: read
+      target:
+        description: combobox Funding Source
+        frame:
+          name: main
+        locators:
+          - strategy: label
+            label: 'Funding Source:'
+            role: combobox
+          - strategy: css
+            selector: select[name="ctl00$cph$ddlFund"]
+      option:
+        literal: Cash Deposit
+      timeout_ms: 15000
+      source: llm
+      rationale: Select cash deposit as funding source for the new sub-account.
+    - id: click_button_continue
+      action: click
+      title: Click button Continue
+      risk: irreversible
+      target:
+        description: button Continue
+        frame:
+          name: main
+        locators:
+          - strategy: role
+            name: Continue
+            role: button
+          - strategy: css
+            selector: input[name="ctl00$cph$btnCont"]
+      expect:
+        kind: all_of
+        conditions:
+          - kind: url_matches
+            path: /cb/subacct_new.asp
+            frame:
+              name: main
+          - kind: text_visible
+            text: Review New Sub-Account
+            frame:
+              name: main
+      timeout_ms: 15000
+      source: llm
+      rationale: Submit the sub-account request
+    - id: click_button_submit
+      action: click
+      title: Click button Submit
+      risk: irreversible
+      target:
+        description: button Submit
+        frame:
+          name: main
+        locators:
+          - strategy: role
+            name: Submit
+            role: button
+          - strategy: css
+            selector: body > form:nth-of-type(1) > input:nth-of-type(7)
+      expect:
+        kind: all_of
+        conditions:
+          - kind: url_matches
+            path: /cb/subacct_submit.asp
+            frame:
+              name: main
+          - kind: text_visible
+            text: Sub-Account Opened Successfully
+            frame:
+              name: main
+      timeout_ms: 15000
+      source: llm
+      rationale: Submit the sub-account request to finalize the transaction.
+    - id: extract_confirmation_number
+      action: extract
+      title: Read confirmation number
+      risk: read
+      target:
+        description: Confirmation number issued by the core for the new share.
+        frame:
+          name: main
+        locators:
+          - strategy: label_value
+            label: 'Confirmation Number:'
+          - strategy: css
+            selector: body > table:nth-of-type(2) > tbody:nth-of-type(1) > tr:nth-of-type(1) > td:nth-of-type(2)
+      output: confirmation_number
+      timeout_ms: 15000
+      source: llm
+      rationale: Extract the confirmation number from the success screen.
+  success:
+    kind: all_of
+    conditions:
+      - kind: url_matches
+        path: /cb/subacct_submit.asp
+        frame:
+          name: main
+      - kind: text_visible
+        text: Sub-Account Opened Successfully
+        frame:
+          name: main

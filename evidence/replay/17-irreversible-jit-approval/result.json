@@ -1,0 +1,148 @@
+{
+  "run_id": "20261014T025745Z-replay-a127ce",
+  "capability": "corebank.member.open_share_account@1.0.0",
+  "digest": "sha256:d559eff9c55eb9856e881e0ba66a6b559f4830574b5ce0d5fd6b7d65b71510ce",
+  "tenant": "cu-alpha",
+  "tenant_overrides": [],
+  "status": "succeeded",
+  "outputs": {
+    "confirmation_number": "CB-48220"
+  },
+  "recoveries": [],
+  "drift": [],
+  "interventions": [
+    {
+      "id": "iv-912d2f7a",
+      "kind": "approval",
+      "reason": "Approval required: 'Click button Continue' is an irreversible action",
+      "operator": "ops.jane",
+      "resolution": "approve",
+      "human_actions": 0,
+      "waited_ms": 1482
+    },
+    {
+      "id": "iv-93cacc88",
+      "kind": "approval",
+      "reason": "Approval required: 'Click button Submit' is an irreversible action",
+      "operator": "ops.jane",
+      "resolution": "approve",
+      "human_actions": 0,
+      "waited_ms": 1020
+    }
+  ],
+  "steps": [
+    {
+      "id": "click_link_sub_account_maintenance",
+      "title": "Click link Sub-Account Maintenance",
+      "status": "ok",
+      "risk": "read",
+      "strategy": "role",
+      "duration_ms": 404,
+      "screenshot": "0008-step-click_link_sub_account_maintenance.png"
+    },
+    {
+      "id": "fill_textbox_member_number",
+      "title": "Enter textbox Member Number",
+      "status": "ok",
+      "risk": "read",
+      "strategy": "label",
+      "duration_ms": 373,
+      "screenshot": "0010-step-fill_textbox_member_number.png"
+    },
+    {
+      "id": "click_button_search",
+      "title": "Click button Search",
+      "status": "ok",
+      "risk": "read",
+      "strategy": "role",
+      "duration_ms": 450,
+      "screenshot": "0012-step-click_button_search.png"
+    },
+    {
+      "id": "click_link_view",
+      "title": "Click link View",
+      "status": "ok",
+      "risk": "read",
+      "strategy": "role",
+      "duration_ms": 450,
+      "screenshot": "0014-step-click_link_view.png"
+    },
+    {
+      "id": "click_button_open_sub_account",
+      "title": "Click button Open Sub-Account",
+      "status": "ok",
+      "risk": "read",
+      "strategy": "role",
+      "duration_ms": 448,
+      "screenshot": "0016-step-click_button_open_sub_account.png"
+    },
+    {
+      "id": "select_combobox_share_type",
+      "title": "Choose combobox Share Type",
+      "status": "ok",
+      "risk": "read",
+      "strategy": "label",
+      "duration_ms": 383,
+      "screenshot": "0018-step-select_combobox_share_type.png"
+    },
+    {
+      "id": "fill_textbox_nickname",
+      "title": "Enter textbox Nickname",
+      "status": "ok",
+      "risk": "read",
+      "strategy": "label",
+      "duration_ms": 367,
+      "screenshot": "0020-step-fill_textbox_nickname.png"
+    },
+    {
+      "id": "fill_textbox_initial_deposit",
+      "title": "Enter textbox Initial Deposit",
+      "status": "ok",
+      "risk": "read",
+      "strategy": "label",
+      "duration_ms": 364,
+      "screenshot": "0022-step-fill_textbox_initial_deposit.png"
+    },
+    {
+      "id": "select_combobox_funding_source",
+      "title": "Choose combobox Funding Source",
+      "status": "ok",
+      "risk": "read",
+      "strategy": "label",
+      "duration_ms": 368,
+      "screenshot": "0024-step-select_combobox_funding_source.png"
+    },
+    {
+      "id": "click_button_continue",
+      "title": "Click button Continue",
+      "status": "ok",
+      "risk": "irreversible",
+      "strategy": "role",
+      "duration_ms": 1983,
+      "screenshot": "0030-step-click_button_continue.png"
+    },
+    {
+      "id": "click_button_submit",
+      "title": "Click button Submit",
+      "status": "ok",
+      "risk": "irreversible",
+      "strategy": "role",
+      "duration_ms": 1516,
+      "screenshot": "0036-step-click_button_submit.png"
+    },
+    {
+      "id": "extract_confirmation_number",
+      "title": "Read confirmation number",
+      "status": "ok",
+      "risk": "read",
+      "strategy": "label_value",
+      "duration_ms": 383,
+      "screenshot": "0039-step-extract_confirmation_number.png"
+    }
+  ],
+  "human_assisted": true,
+  "app_version": "4.2.1",
+  "started_at": "2026-10-14T02:57:45.939778Z",
+  "duration_ms": 8951,
+  "evidence_dir": "runs/20261014T025745Z-replay-a127ce"
+}

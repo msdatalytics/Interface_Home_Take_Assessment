@@ -1,0 +1,24 @@
+$ cua replay corebank.member.open_share_account -p member_id=100591 -p "share_type=Holiday Club" -p "nickname=Ski Trip" -p initial_deposit=75 --on-failure escalate --escalation-timeout 180
+
+[intervention] APPROVAL iv-912d2f7a: Approval required: 'Click button Continue' is an irreversible action -> http://127.0.0.1:8765/interventions/iv-912d2f7a
+
+
+[intervention] APPROVAL iv-93cacc88: Approval required: 'Click button Submit' is an irreversible action -> http://127.0.0.1:8765/interventions/iv-93cacc88
+
+──────── SUCCEEDED corebank.member.open_share_account@1.0.0 on cu-alpha ────────
+ run                         20261014T025745Z-replay-a127ce                     
+ duration                    8951 ms                                            
+ app version                 4.2.1                                              
+ output.confirmation_number  CB-48220                                           
+ intervention                iv-912d2f7a approval -> approve by ops.jane (0     
+                             human actions, waited 1482 ms)                     
+ intervention                iv-93cacc88 approval -> approve by ops.jane (0     
+                             human actions, waited 1020 ms)                     
+ evidence                    runs/20261014T025745Z-replay-a127ce
+[exit 0]
+
+--- simulated operator (scripts/operator_bot.py) ---
+operator: approval iv-912d2f7a: Approval required: 'Click button Continue' is an irreversible action
+operator: resolved iv-912d2f7a -> approve
+operator: approval iv-93cacc88: Approval required: 'Click button Submit' is an irreversible action
+operator: resolved iv-93cacc88 -> approve

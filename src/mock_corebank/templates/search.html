@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block body %}
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr><td class="ttl"><font size="3"><b>Member Inquiry</b></font></td></tr>
+</table>
+<br>
+<form name="aspnetForm" method="get" action="mbr_search.asp">
+<input type="hidden" name="__EVENTTARGET" value="">
+<input type="hidden" name="sid" value="{{ sid }}">
+<table border="0" cellpadding="3" cellspacing="0">
+  <tr>
+    <td class="lbl">{{ v.member_number }}</td>
+    <td><input type="text" name="{{ p }}$txtMbrNo" id="{{ p | replace('$', '_') }}_txtMbrNo" size="14" maxlength="12"
+               value="{{ query or '' }}" onkeydown="if (event.keyCode == 13) { __doPostBack('btnSearch'); return false; }"></td>
+    <td><input type="button" class="btn" value="{{ v.search_button }}" onclick="__doPostBack('btnSearch')"></td>
+  </tr>
+</table>
+</form>
+{% if searched %}
+<br>
+{% if error %}
+<font color="red"><b>*** {{ error }} ***</b></font>
+{% elif not results %}
+<font color="#990000">No records found matching the search criteria.</font>
+{% else %}
+<table class="grid" border="0" cellspacing="0" cellpadding="0">
+  <tr class="hdr"><td>Member #</td><td>Name</td><td>Status</td><td>&nbsp;</td></tr>
+  {% for m in results %}
+  <tr>
+    <td>{{ m.member_number }}</td>
+    <td>{{ m.name }}</td>
+    <td>{{ m.status }}</td>
+    <td><a href="mbr_detail.asp?m={{ m.member_number }}&amp;sid={{ sid }}">View</a></td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+{% endif %}
+{% endblock %}

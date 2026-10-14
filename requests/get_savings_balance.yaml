@@ -1,0 +1,31 @@
+# What the business wants (owned by a human). The agent discovers *how*; it never invents the contract.
+apiVersion: cua.dev/v1
+kind: DiscoveryRequest
+metadata:
+  name: corebank.member.get_savings_balance
+  version: 1.0.0
+  title: Get a member's primary savings balance
+  description: >-
+    Look up a member by member number and return the current balance of the member's
+    primary savings share.
+  tags: [member, balance, read-only]
+spec:
+  app: meridian_corebank
+  goal: >-
+    Look up the member whose member number is {member_id}, open their record, and read the
+    current balance of their primary savings account.
+  inputs:
+    - name: member_id
+      type: string
+      description: Member number as issued by the credit union.
+      sensitivity: pii
+      pattern: "^[0-9]+$"
+  outputs:
+    - name: savings_balance
+      type: money
+      description: Current balance of the primary savings share, in USD.
+      sensitivity: confidential
+  # Values used for this discovery run only (synthetic test member). Never stored in the artifact.
+  values:
+    member_id: "100234"
+  max_steps: 20

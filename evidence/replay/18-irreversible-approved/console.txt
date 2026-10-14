@@ -1,0 +1,8 @@
+$ cua replay evidence/inputs/open_share_account.approved.yaml -p member_id=100591 -p "share_type=Holiday Club" -p "nickname=Ski Trip" -p initial_deposit=75 --escalation-timeout 180
+──────── SUCCEEDED corebank.member.open_share_account@1.0.0 on cu-alpha ────────
+ run                         20261014T025755Z-replay-fad033      
+ duration                    6369 ms                             
+ app version                 4.2.1                               
+ output.confirmation_number  CB-48221                            
+ evidence                    runs/20261014T025755Z-replay-fad033
+[exit 0]

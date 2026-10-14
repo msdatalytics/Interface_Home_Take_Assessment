@@ -1,0 +1,21 @@
+$ cua replay corebank.member.get_savings_balance -p member_id=100234 --escalation-timeout 180
+───────── FAILED corebank.member.get_savings_balance@1.0.0 on cu-alpha ─────────
+ run                     20261014T025724Z-replay-862cb6                         
+ duration                7576 ms                                                
+ app version             4.2.1                                                  
+ failure                 ACTION_FAILED (automation, retryable=False)            
+ message                 click failed: Locator.click: Timeout 5000ms exceeded.  
+                         - the target is covered by another element (e.g. an    
+                         unexpected modal dialog)                               
+ step                    #2 click_button_search - Click button Search           
+ expected                button Search in frame[name=main]                      
+ observed                top=/cb/main.asp; banner=/cb/banner.asp;               
+                         nav=/cb/nav.asp; main=/cb/mbr_search.asp               
+   evidence.screenshot   0011-failure-click_button_search.png                   
+   evidence.dom          ['dom-failure-click_button_search/frame-0-top.html',   
+                         'dom-failure-click_button_search/frame-1-banner.html', 
+                         'dom-failure-click_button_search/frame-2-nav.html',    
+                         'dom-failure-click_button_search/frame-3-main.html']   
+   evidence.observation  observation-failure-click_button_search.txt            
+ evidence                runs/20261014T025724Z-replay-862cb6
+[exit 1]

@@ -1,0 +1,15 @@
+{
+  "run_id": "20261014T024657Z-discovery-d38518",
+  "mode": "discovery",
+  "status": "completed",
+  "reason": "Primary savings balance extracted for member [param:member_id]",
+  "turns": 6,
+  "usage": {
+    "input_tokens": 10491,
+    "output_tokens": 2054
+  },
+  "model": "qwen3:8b",
+  "artifact": "capabilities/meridian_corebank/corebank.member.get_savings_balance.yaml",
+  "steps_recorded": 5,
+  "human_assisted": false
+}

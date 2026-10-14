@@ -1,0 +1,65 @@
+$ cua replay corebank.member.get_savings_balance -p member_id=100234 --repeat 10 --escalation-timeout 180
+─────── SUCCEEDED corebank.member.get_savings_balance@1.0.0 on cu-alpha ────────
+ run                     20261014T025557Z-replay-f62ea6      
+ duration                3521 ms                             
+ app version             4.2.1                               
+ output.savings_balance  2481.37                             
+ evidence                runs/20261014T025557Z-replay-f62ea6 
+─────── SUCCEEDED corebank.member.get_savings_balance@1.0.0 on cu-alpha ────────
+ run                     20261014T025600Z-replay-31c768      
+ duration                3551 ms                             
+ app version             4.2.1                               
+ output.savings_balance  2481.37                             
+ evidence                runs/20261014T025600Z-replay-31c768 
+─────── SUCCEEDED corebank.member.get_savings_balance@1.0.0 on cu-alpha ────────
+ run                     20261014T025604Z-replay-c54093      
+ duration                3485 ms                             
+ app version             4.2.1                               
+ output.savings_balance  2481.37                             
+ evidence                runs/20261014T025604Z-replay-c54093 
+─────── SUCCEEDED corebank.member.get_savings_balance@1.0.0 on cu-alpha ────────
+ run                     20261014T025608Z-replay-b8d683      
+ duration                3520 ms                             
+ app version             4.2.1                               
+ output.savings_balance  2481.37                             
+ evidence                runs/20261014T025608Z-replay-b8d683 
+─────── SUCCEEDED corebank.member.get_savings_balance@1.0.0 on cu-alpha ────────
+ run                     20261014T025612Z-replay-528b3f      
+ duration                3570 ms                             
+ app version             4.2.1                               
+ output.savings_balance  2481.37                             
+ evidence                runs/20261014T025612Z-replay-528b3f 
+─────── SUCCEEDED corebank.member.get_savings_balance@1.0.0 on cu-alpha ────────
+ run                     20261014T025616Z-replay-57483f      
+ duration                3583 ms                             
+ app version             4.2.1                               
+ output.savings_balance  2481.37                             
+ evidence                runs/20261014T025616Z-replay-57483f 
+─────── SUCCEEDED corebank.member.get_savings_balance@1.0.0 on cu-alpha ────────
+ run                     20261014T025619Z-replay-d7d1eb      
+ duration                3561 ms                             
+ app version             4.2.1                               
+ output.savings_balance  2481.37                             
+ evidence                runs/20261014T025619Z-replay-d7d1eb 
+─────── SUCCEEDED corebank.member.get_savings_balance@1.0.0 on cu-alpha ────────
+ run                     20261014T025623Z-replay-d4095a      
+ duration                3589 ms                             
+ app version             4.2.1                               
+ output.savings_balance  2481.37                             
+ evidence                runs/20261014T025623Z-replay-d4095a 
+─────── SUCCEEDED corebank.member.get_savings_balance@1.0.0 on cu-alpha ────────
+ run                     20261014T025627Z-replay-fa1251      
+ duration                3571 ms                             
+ app version             4.2.1                               
+ output.savings_balance  2481.37                             
+ evidence                runs/20261014T025627Z-replay-fa1251 
+─────── SUCCEEDED corebank.member.get_savings_balance@1.0.0 on cu-alpha ────────
+ run                     20261014T025631Z-replay-1593e5      
+ duration                3573 ms                             
+ app version             4.2.1                               
+ output.savings_balance  2481.37                             
+ evidence                runs/20261014T025631Z-replay-1593e5 
+────────────────────────────────── stability ───────────────────────────────────
+runs=10 statuses={'succeeded': 10} distinct_outputs=1 locator_fallbacks=0 
+recoveries=0 p50=3570ms max=3589ms
+[exit 0]

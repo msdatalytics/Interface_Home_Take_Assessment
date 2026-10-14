@@ -1,0 +1,18 @@
+$ cua replay corebank.member.get_savings_balance -p member_id=100234 --on-failure escalate --escalation-timeout 180
+
+[intervention] FAILURE iv-1fc5c74a: ACTION_FAILED: click failed: Locator.click: Timeout 5000ms exceeded. - the target is covered by another element (e.g. an unexpected modal dialog) -> http://127.0.0.1:8765/interventions/iv-1fc5c74a
+
+─────── SUCCEEDED corebank.member.get_savings_balance@1.0.0 on cu-alpha ────────
+ run                     20261014T025732Z-replay-ae6b61                         
+ duration                11736 ms                                               
+ app version             4.2.1                                                  
+ output.savings_balance  2481.37                                                
+ intervention            iv-1fc5c74a failure -> retry_step by ops.jane (1 human 
+                         actions, waited 2813 ms)                               
+ evidence                runs/20261014T025732Z-replay-ae6b61
+[exit 0]
+
+--- simulated operator (scripts/operator_bot.py) ---
+operator: failure iv-1fc5c74a: ACTION_FAILED: click failed: Locator.click: Timeout 5000ms exceeded. - the target is covered by another element (e.g. an unexpected modal dialog)
+operator: click e13 (button "Continue Session")
+operator: resolved iv-1fc5c74a -> retry_step

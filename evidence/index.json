@@ -1,0 +1,401 @@
+[
+  {
+    "id": "get_savings_balance",
+    "section": "discovery",
+    "title": "LLM discovery: savings balance lookup",
+    "shows": "observe\u2192decide\u2192act loop, verified ranked locators, derived checkpoints, extraction, no PII in artifact",
+    "command": "cua discover requests/get_savings_balance.yaml -t cu-alpha --escalation-timeout 180",
+    "faults": [],
+    "exit": 0,
+    "expected_exit": 0,
+    "ok": true,
+    "seconds": 134.7,
+    "status": "completed",
+    "code": "",
+    "runs": [
+      "20261014T024657Z-discovery-d38518"
+    ]
+  },
+  {
+    "id": "open_share_account",
+    "section": "discovery",
+    "title": "LLM discovery: open a share sub-account (irreversible)",
+    "shows": "irreversible Submit detected and paused for live human approval before it was clicked",
+    "command": "cua discover requests/open_share_account.yaml -t cu-alpha --escalation-timeout 180",
+    "faults": [],
+    "exit": 0,
+    "expected_exit": 0,
+    "ok": true,
+    "seconds": 399.7,
+    "status": "completed",
+    "code": "",
+    "runs": [
+      "20261014T024912Z-discovery-8233a7"
+    ]
+  },
+  {
+    "id": "01-success",
+    "section": "replay",
+    "title": "Replay: success",
+    "shows": "typed output, no LLM, confidential output fingerprinted at rest",
+    "command": "cua replay corebank.member.get_savings_balance -p member_id=100234 --escalation-timeout 180",
+    "faults": [],
+    "exit": 0,
+    "expected_exit": 0,
+    "ok": true,
+    "seconds": 4.4,
+    "status": "succeeded",
+    "code": "",
+    "runs": [
+      "20261014T025552Z-replay-08482d"
+    ]
+  },
+  {
+    "id": "02-stability",
+    "section": "replay",
+    "title": "Replay x10: stability report",
+    "shows": "identical output fingerprint across 10 runs",
+    "command": "cua replay corebank.member.get_savings_balance -p member_id=100234 --repeat 10 --escalation-timeout 180",
+    "faults": [],
+    "exit": 0,
+    "expected_exit": 0,
+    "ok": true,
+    "seconds": 38.5,
+    "status": "succeeded",
+    "code": "",
+    "runs": [
+      "20261014T025557Z-replay-f62ea6",
+      "20261014T025600Z-replay-31c768",
+      "20261014T025604Z-replay-c54093",
+      "20261014T025608Z-replay-b8d683",
+      "20261014T025612Z-replay-528b3f",
+      "20261014T025616Z-replay-57483f",
+      "20261014T025619Z-replay-d7d1eb",
+      "20261014T025623Z-replay-d4095a",
+      "20261014T025627Z-replay-fa1251",
+      "20261014T025631Z-replay-1593e5"
+    ]
+  },
+  {
+    "id": "03-tenant-beta",
+    "section": "replay",
+    "title": "Replay on cu-beta (other tenant)",
+    "shows": "vocabulary map + step-id override reuse the same artifact on a relabelled tenant",
+    "command": "cua replay corebank.member.get_savings_balance -t cu-beta -p member_id=200145 --escalation-timeout 180",
+    "faults": [],
+    "exit": 0,
+    "expected_exit": 0,
+    "ok": true,
+    "seconds": 3.7,
+    "status": "succeeded",
+    "code": "",
+    "runs": [
+      "20261014T025635Z-replay-925b3c"
+    ]
+  },
+  {
+    "id": "04-outcome-not-found",
+    "section": "replay",
+    "title": "Business outcome: record not found",
+    "shows": "status business_outcome, exit 2",
+    "command": "cua replay corebank.member.get_savings_balance -p member_id=999999 --escalation-timeout 180",
+    "faults": [],
+    "exit": 2,
+    "expected_exit": 2,
+    "ok": true,
+    "seconds": 3.3,
+    "status": "business_outcome",
+    "code": "record_not_found",
+    "runs": [
+      "20261014T025639Z-replay-03a80a"
+    ]
+  },
+  {
+    "id": "05-outcome-validation",
+    "section": "replay",
+    "title": "Business outcome: app validation message",
+    "shows": "app message captured into the outcome",
+    "command": "cua replay corebank.member.get_savings_balance -p member_id=123 --escalation-timeout 180",
+    "faults": [],
+    "exit": 2,
+    "expected_exit": 2,
+    "ok": true,
+    "seconds": 3.3,
+    "status": "business_outcome",
+    "code": "validation_error",
+    "runs": [
+      "20261014T025642Z-replay-75ea8f"
+    ]
+  },
+  {
+    "id": "06-outcome-access-denied",
+    "section": "replay",
+    "title": "Business outcome: restricted member",
+    "shows": "SEC-403 page mapped to access_denied",
+    "command": "cua replay corebank.member.get_savings_balance -p member_id=100777 --escalation-timeout 180",
+    "faults": [],
+    "exit": 2,
+    "expected_exit": 2,
+    "ok": true,
+    "seconds": 3.7,
+    "status": "business_outcome",
+    "code": "access_denied",
+    "runs": [
+      "20261014T025645Z-replay-e96587"
+    ]
+  },
+  {
+    "id": "07-input-invalid",
+    "section": "replay",
+    "title": "Hard failure: invalid input",
+    "shows": "typed contract rejects input before the app is touched",
+    "command": "cua replay corebank.member.get_savings_balance -p member_id=12AB --escalation-timeout 180",
+    "faults": [],
+    "exit": 1,
+    "expected_exit": 1,
+    "ok": true,
+    "seconds": 0.5,
+    "status": "failed",
+    "code": "INPUT_INVALID",
+    "runs": [
+      "20261014T025649Z-replay-a82d99"
+    ]
+  },
+  {
+    "id": "08-recover-maintenance",
+    "section": "replay",
+    "title": "Recovery: maintenance interstitial",
+    "shows": "interstitial handler dismisses it, step resumes",
+    "command": "cua replay corebank.member.get_savings_balance -p member_id=100234 --escalation-timeout 180",
+    "faults": [
+      "maintenance_notice on mbr_detail x1"
+    ],
+    "exit": 0,
+    "expected_exit": 0,
+    "ok": true,
+    "seconds": 4.4,
+    "status": "succeeded",
+    "code": "",
+    "runs": [
+      "20261014T025650Z-replay-fa7c1c"
+    ]
+  },
+  {
+    "id": "09-recover-server-error",
+    "section": "replay",
+    "title": "Recovery: transient server error",
+    "shows": "bounded backoff + frame reload",
+    "command": "cua replay corebank.member.get_savings_balance -p member_id=100234 --escalation-timeout 180",
+    "faults": [
+      "server_error on mbr_detail x1"
+    ],
+    "exit": 0,
+    "expected_exit": 0,
+    "ok": true,
+    "seconds": 5.1,
+    "status": "succeeded",
+    "code": "",
+    "runs": [
+      "20261014T025654Z-replay-159061"
+    ]
+  },
+  {
+    "id": "10-recover-session-expired",
+    "section": "replay",
+    "title": "Recovery: session expired mid-run",
+    "shows": "re-login and safe restart (read-only so far)",
+    "command": "cua replay corebank.member.get_savings_balance -p member_id=100234 --escalation-timeout 180",
+    "faults": [
+      "session_expired on mbr_detail x1"
+    ],
+    "exit": 0,
+    "expected_exit": 0,
+    "ok": true,
+    "seconds": 6.9,
+    "status": "succeeded",
+    "code": "",
+    "runs": [
+      "20261014T025659Z-replay-7b5b2e"
+    ]
+  },
+  {
+    "id": "11-recover-slow",
+    "section": "replay",
+    "title": "Recovery: slow application (3 s)",
+    "shows": "waits on checkpoints, not sleeps",
+    "command": "cua replay corebank.member.get_savings_balance -p member_id=100234 --escalation-timeout 180",
+    "faults": [
+      "slow on mbr_search x1"
+    ],
+    "exit": 0,
+    "expected_exit": 0,
+    "ok": true,
+    "seconds": 7.1,
+    "status": "succeeded",
+    "code": "",
+    "runs": [
+      "20261014T025706Z-replay-229fe3"
+    ]
+  },
+  {
+    "id": "12-drift-locator-fallback",
+    "section": "replay",
+    "title": "Drift: primary locator broken",
+    "shows": "falls back to next ranked locator, reports drift",
+    "command": "cua replay evidence/inputs/get_savings_balance.drifted.yaml -p member_id=100234 --escalation-timeout 180",
+    "faults": [],
+    "exit": 0,
+    "expected_exit": 0,
+    "ok": true,
+    "seconds": 4.0,
+    "status": "succeeded",
+    "code": "",
+    "runs": [
+      "20261014T025713Z-replay-db2219"
+    ]
+  },
+  {
+    "id": "13-fail-persistent-error",
+    "section": "replay",
+    "title": "Hard failure: persistent server error",
+    "shows": "APP_ERROR (retryable) with masked screenshot + DOM snapshot",
+    "command": "cua replay corebank.member.get_savings_balance -p member_id=100234 --escalation-timeout 180",
+    "faults": [
+      "server_error on mbr_detail x10"
+    ],
+    "exit": 1,
+    "expected_exit": 1,
+    "ok": true,
+    "seconds": 6.7,
+    "status": "failed",
+    "code": "APP_ERROR",
+    "runs": [
+      "20261014T025717Z-replay-356edc"
+    ]
+  },
+  {
+    "id": "14-fail-unexpected-modal",
+    "section": "replay",
+    "title": "Hard failure: unexpected modal",
+    "shows": "fails fast with an actionable reason",
+    "command": "cua replay corebank.member.get_savings_balance -p member_id=100234 --escalation-timeout 180",
+    "faults": [
+      "unknown_dialog on mbr_search x1"
+    ],
+    "exit": 1,
+    "expected_exit": 1,
+    "ok": true,
+    "seconds": 8.1,
+    "status": "failed",
+    "code": "ACTION_FAILED",
+    "runs": [
+      "20261014T025724Z-replay-862cb6"
+    ]
+  },
+  {
+    "id": "15-handoff-unexpected-modal",
+    "section": "replay",
+    "title": "Handoff: operator clears the modal in the live session",
+    "shows": "escalate \u2192 lease to human \u2192 human click captured \u2192 retry_step \u2192 automation resumes",
+    "command": "cua replay corebank.member.get_savings_balance -p member_id=100234 --on-failure escalate --escalation-timeout 180",
+    "faults": [
+      "unknown_dialog on mbr_search x1"
+    ],
+    "exit": 0,
+    "expected_exit": 0,
+    "ok": true,
+    "seconds": 12.5,
+    "status": "succeeded",
+    "code": "",
+    "runs": [
+      "20261014T025732Z-replay-ae6b61"
+    ]
+  },
+  {
+    "id": "16-irreversible-unapproved",
+    "section": "replay",
+    "title": "Irreversible: draft artifact refused",
+    "shows": "APPROVAL_REQUIRED at preflight, the app is never touched",
+    "command": "cua replay corebank.member.open_share_account -p member_id=100591 -p \"share_type=Holiday Club\" -p \"nickname=Ski Trip\" -p initial_deposit=75 --escalation-timeout 180",
+    "faults": [],
+    "exit": 1,
+    "expected_exit": 1,
+    "ok": true,
+    "seconds": 0.6,
+    "status": "failed",
+    "code": "APPROVAL_REQUIRED",
+    "runs": [
+      "20261014T025745Z-replay-fd3cae"
+    ]
+  },
+  {
+    "id": "17-irreversible-jit-approval",
+    "section": "replay",
+    "title": "Irreversible: just-in-time operator approval",
+    "shows": "pauses before Submit, operator approves, transaction commits",
+    "command": "cua replay corebank.member.open_share_account -p member_id=100591 -p \"share_type=Holiday Club\" -p \"nickname=Ski Trip\" -p initial_deposit=75 --on-failure escalate --escalation-timeout 180",
+    "faults": [],
+    "exit": 0,
+    "expected_exit": 0,
+    "ok": true,
+    "seconds": 9.7,
+    "status": "succeeded",
+    "code": "",
+    "runs": [
+      "20261014T025745Z-replay-a127ce"
+    ]
+  },
+  {
+    "id": "18-irreversible-approved",
+    "section": "replay",
+    "title": "Irreversible: approved artifact runs unattended",
+    "shows": "approval bound to the content digest",
+    "command": "cua replay evidence/inputs/open_share_account.approved.yaml -p member_id=100591 -p \"share_type=Holiday Club\" -p \"nickname=Ski Trip\" -p initial_deposit=75 --escalation-timeout 180",
+    "faults": [],
+    "exit": 0,
+    "expected_exit": 0,
+    "ok": true,
+    "seconds": 6.9,
+    "status": "succeeded",
+    "code": "",
+    "runs": [
+      "20261014T025755Z-replay-fad033"
+    ]
+  },
+  {
+    "id": "19-irreversible-tampered",
+    "section": "replay",
+    "title": "Irreversible: edited after approval",
+    "shows": "digest mismatch revokes the approval",
+    "command": "cua replay evidence/inputs/open_share_account.tampered.yaml -p member_id=100591 -p \"share_type=Holiday Club\" -p \"nickname=Ski Trip\" -p initial_deposit=75 --escalation-timeout 180",
+    "faults": [],
+    "exit": 1,
+    "expected_exit": 1,
+    "ok": true,
+    "seconds": 0.5,
+    "status": "failed",
+    "code": "APPROVAL_REQUIRED",
+    "runs": [
+      "20261014T025802Z-replay-a8e296"
+    ]
+  },
+  {
+    "id": "20-irreversible-outcome-unknown",
+    "section": "replay",
+    "title": "Irreversible: error right after Submit",
+    "shows": "OUTCOME_UNKNOWN, not retried (never double-post)",
+    "command": "cua replay evidence/inputs/open_share_account.approved.yaml -p member_id=100591 -p \"share_type=Holiday Club\" -p \"nickname=Ski Trip\" -p initial_deposit=75 --escalation-timeout 180",
+    "faults": [
+      "server_error on subacct_submit x1"
+    ],
+    "exit": 1,
+    "expected_exit": 1,
+    "ok": true,
+    "seconds": 6.4,
+    "status": "failed",
+    "code": "OUTCOME_UNKNOWN",
+    "runs": [
+      "20261014T025802Z-replay-b9c471"
+    ]
+  }
+]

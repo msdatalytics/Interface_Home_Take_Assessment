@@ -1,0 +1,213 @@
+# Capability recorded by LLM discovery run 20261014T010801Z-discovery-a7c907.
+# Status: draft - review targets/risk before `cua approve`.
+apiVersion: cua.dev/v1
+kind: Capability
+metadata:
+  name: corebank.member.get_savings_balance
+  title: Get a member's primary savings balance
+  version: 1.0.0
+  description: Look up a member by member number and return the current balance of the member's primary savings share.
+  app: meridian_corebank
+  app_versions: '>=4.2,<5'
+  status: draft
+  approvals: []
+  tags:
+    - member
+    - balance
+    - read-only
+  provenance:
+    method: llm_discovery
+    run_id: 20261014T010801Z-discovery-a7c907
+    recorded_at: '2026-10-14T01:08:05Z'
+    recorded_on_tenant: cu-alpha
+    recorded_on_app_version: 4.2.1
+    model: scripted:scripted
+    goal: Look up the member whose member number is {member_id}, open their record, and read the current balance of their primary savings account.
+    human_assisted: false
+  digest: sha256:cd9e10b36543e415536eb4fa546f524d8f4e90e3f6ab04a88f28ff1b13c713a0
+spec:
+  inputs:
+    - name: member_id
+      type: string
+      description: Member number as issued by the credit union.
+      required: true
+      sensitivity: pii
+      pattern: ^[0-9]+$
+  outputs:
+    - name: savings_balance
+      type: money
+      description: Current balance of the primary savings share, in USD.
+      sensitivity: confidential
+      required: true
+  outcomes:
+    - code: record_not_found
+      description: No member matches the supplied member number.
+      detect:
+        kind: text_visible
+        text: No records found matching the search criteria
+        frame:
+          name: main
+      retryable: false
+    - code: access_denied
+      description: The signed-on user lacks privilege for this record (e.g. restricted employee accounts).
+      detect:
+        kind: text_visible
+        pattern: ACCESS DENIED \(SEC-403\)
+        frame:
+          name: main
+      retryable: false
+    - code: validation_error
+      description: The application rejected an input; the message carries the application's reason.
+      detect:
+        kind: text_visible
+        pattern: \*\*\* (?P<message>[^*]+?) \*\*\*
+        frame:
+          name: main
+      retryable: false
+    - code: duplicate_request
+      description: The application already processed this request (idempotency guard).
+      detect:
+        kind: text_visible
+        text: This request has already been processed
+        frame:
+          name: main
+      retryable: false
+  entry:
+    requires_session: true
+  steps:
+    - id: click_link_member_inquiry
+      action: click
+      title: Click link Member Inquiry
+      risk: read
+      target:
+        description: link Member Inquiry
+        frame:
+          name: nav
+        locators:
+          - strategy: role
+            name: Member Inquiry
+            role: link
+          - strategy: text
+            text: Member Inquiry
+          - strategy: css
+            selector: body > table:nth-of-type(1) > tbody:nth-of-type(1) > tr:nth-of-type(2) > td:nth-of-type(1) > a:nth-of-type(1)
+      expect:
+        kind: all_of
+        conditions:
+          - kind: url_matches
+            path: /cb/mbr_search.asp
+            frame:
+              name: main
+          - kind: text_visible
+            text: Member Inquiry
+            frame:
+              name: main
+      timeout_ms: 15000
+      source: llm
+      rationale: open search
+    - id: fill_textbox_member_number
+      action: fill
+      title: Enter textbox Member Number
+      risk: read
+      target:
+        description: textbox Member Number
+        frame:
+          name: main
+        locators:
+          - strategy: label
+            label: 'Member Number:'
+            role: textbox
+          - strategy: css
+            selector: input[name="ctl00$cph$txtMbrNo"]
+      value:
+        param: member_id
+      timeout_ms: 15000
+      source: llm
+      rationale: enter
+    - id: click_button_search
+      action: click
+      title: Click button Search
+      risk: read
+      target:
+        description: button Search
+        frame:
+          name: main
+        locators:
+          - strategy: role
+            name: Search
+            role: button
+          - strategy: css
+            selector: body > form:nth-of-type(1) > table:nth-of-type(1) > tbody:nth-of-type(1) > tr:nth-of-type(1) > td:nth-of-type(3) > input:nth-of-type(1)
+      expect:
+        kind: text_visible
+        text: 'Member #'
+        frame:
+          name: main
+      timeout_ms: 15000
+      source: llm
+      rationale: search
+    - id: click_link_view
+      action: click
+      title: Click link View
+      risk: read
+      target:
+        description: link View
+        frame:
+          name: main
+        locators:
+          - strategy: role
+            name: View
+            role: link
+          - strategy: text
+            text: View
+          - strategy: css
+            selector: body > table:nth-of-type(2) > tbody:nth-of-type(1) > tr:nth-of-type(2) > td:nth-of-type(4) > a:nth-of-type(1)
+      expect:
+        kind: all_of
+        conditions:
+          - kind: url_matches
+            path: /cb/mbr_detail.asp
+            frame:
+              name: main
+          - kind: text_visible
+            text: Member Account Summary
+            frame:
+              name: main
+      timeout_ms: 15000
+      source: llm
+      rationale: open member
+    - id: extract_savings_balance
+      action: extract
+      title: Read savings balance
+      risk: read
+      target:
+        description: Current balance of the primary savings share, in USD.
+        frame:
+          name: main
+        locators:
+          - strategy: table_cell
+            row: Primary Savings
+            column: Balance
+          - strategy: table_cell
+            row: SAV
+            column: Balance
+          - strategy: table_cell
+            row: S00
+            column: Balance
+          - strategy: css
+            selector: body > table:nth-of-type(3) > tbody:nth-of-type(1) > tr:nth-of-type(2) > td:nth-of-type(4)
+      output: savings_balance
+      timeout_ms: 15000
+      source: llm
+      rationale: balance
+  success:
+    kind: all_of
+    conditions:
+      - kind: url_matches
+        path: /cb/mbr_detail.asp
+        frame:
+          name: main
+      - kind: text_visible
+        text: Member Account Summary
+        frame:
+          name: main

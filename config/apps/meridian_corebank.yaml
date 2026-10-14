@@ -1,0 +1,100 @@
+# Vendor-product knowledge for "Meridian CoreBank", shared by every capability and every
+# tenant that runs it. Authored and reviewed by integration engineers.
+apiVersion: cua.dev/v1
+kind: AppProfile
+metadata:
+  name: meridian_corebank
+  version: 1.0.0
+  vendor: Meridian Financial Systems
+  product: CoreBank Teller Workstation
+  description: Server-rendered teller workstation (frameset shell, table layouts, no test ids).
+spec:
+  session:
+    entry_path: /cb/main.asp
+    logged_out_when:
+      kind: element_visible
+      target:
+        description: Sign On button
+        locators:
+          - {strategy: role, role: button, name: Sign On}
+    logged_in_when:
+      kind: text_visible
+      text: CoreBank Teller Workstation
+      frame: {name: banner}
+    login_steps:
+      - id: enter_user_id
+        action: fill
+        title: Enter user ID
+        source: author
+        target:
+          description: User ID field
+          locators:
+            - {strategy: label, label: User ID, role: textbox}
+            - {strategy: css, selector: "input[name$='$txtUsr']"}
+        value: {secret: corebank.username}
+      - id: enter_password
+        action: fill
+        title: Enter password
+        source: author
+        target:
+          description: Password field
+          locators:
+            - {strategy: label, label: Password, role: textbox}
+            - {strategy: css, selector: "input[type=password]"}
+        value: {secret: corebank.password}
+      - id: sign_on
+        action: click
+        title: Sign on
+        source: author
+        target:
+          description: Sign On button
+          locators:
+            - {strategy: role, role: button, name: Sign On}
+
+  # Exceptional states, checked continuously while replay waits for targets/checkpoints.
+  handlers:
+    - id: session_expired
+      kind: session_expired
+      description: Session timed out; the sign-on form is rendered (often inside the content frame).
+      detect: {kind: text_visible, text: Your session has expired}
+    - id: server_runtime_error
+      kind: transient_error
+      description: ASP.NET runtime error page (typically a transient database listener failure).
+      detect: {kind: text_visible, pattern: "Server Error in '/cb' Application", frame: {name: main}}
+      reload_frame: {name: main}
+      max_attempts: 2
+      backoff_ms: 750
+    - id: maintenance_notice
+      kind: interstitial
+      description: Scheduled-maintenance notice that must be acknowledged before continuing.
+      detect: {kind: text_visible, text: IMPORTANT SYSTEM NOTICE, frame: {name: main}}
+      max_attempts: 3
+      steps:
+        - id: acknowledge_notice
+          action: click
+          title: Acknowledge the maintenance notice
+          source: author
+          target:
+            description: Acknowledge button
+            frame: {name: main}
+            locators:
+              - {strategy: role, role: button, name: Acknowledge}
+
+  # Business outcomes: legitimate answers the caller must handle, not crashes.
+  outcomes:
+    - code: record_not_found
+      description: No member matches the supplied member number.
+      detect: {kind: text_visible, text: No records found matching the search criteria, frame: {name: main}}
+    - code: access_denied
+      description: The signed-on user lacks privilege for this record (e.g. restricted employee accounts).
+      detect: {kind: text_visible, pattern: "ACCESS DENIED \\(SEC-403\\)", frame: {name: main}}
+    - code: validation_error
+      description: The application rejected an input; the message carries the application's reason.
+      detect: {kind: text_visible, pattern: "\\*\\*\\* (?P<message>[^*]+?) \\*\\*\\*", frame: {name: main}}
+    - code: duplicate_request
+      description: The application already processed this request (idempotency guard).
+      detect: {kind: text_visible, text: This request has already been processed, frame: {name: main}}
+
+  version_probe:
+    frame: {name: banner}
+    pattern: "Meridian CoreBank v(?P<version>\\d+\\.\\d+\\.\\d+)"

@@ -1,0 +1,13 @@
+apiVersion: cua.dev/v1
+kind: Tenant
+metadata:
+  name: cu-alpha
+  display_name: Alpha Community Credit Union
+spec:
+  apps:
+    meridian_corebank:
+      base_url: http://127.0.0.1:8401
+      expected_version: 4.2.1
+      secrets:
+        corebank.username: CU_ALPHA_COREBANK_USERNAME
+        corebank.password: CU_ALPHA_COREBANK_PASSWORD

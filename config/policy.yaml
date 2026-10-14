@@ -1,0 +1,42 @@
+# Guardrail policy (applies to discovery and replay). Reviewed like code.
+apiVersion: cua.dev/v1
+kind: Policy
+spec:
+  # Only the tenant's own app origin. Everything else is aborted at the network layer.
+  allowed_origins: ["{tenant}"]
+  allowed_paths: ["/cb/*"]
+  denied_paths:
+    - "/__admin/*"        # test-harness / admin surfaces
+    - "/cb/logoff.asp"    # automation must not end the operator session
+    - "/cb/reports.asp"   # not needed by any capability (least privilege)
+  allowed_actions: [navigate, click, fill, select, press, extract]
+
+  # Risk inference from the control's label. Effective risk = max(declared, inferred),
+  # so neither the model nor an edited artifact can downgrade a "Submit".
+  irreversible_keywords:
+    [submit, confirm, post, transfer, wire, approve, authorize, delete, remove, close account,
+     disburse, pay, send, void, reverse, finalize, execute]
+  write_keywords: [continue, save, update, apply, next]
+
+  discovery:
+    read: allow
+    write: allow
+    irreversible: require_human_approval   # the model may propose it; a human decides
+  replay:
+    read: allow
+    write: allow
+    irreversible: require_approved_artifact  # unattended only if the reviewed digest is approved
+
+  redaction:
+    patterns: {}          # added to the built-ins (ssn, card, email, phone, tokens, long account numbers)
+    sensitive_labels:     # values next to these labels are masked in observations and screenshots
+      - "\\bssn\\b"
+      - "social security"
+      - "date of birth"
+      - "\\bdob\\b"
+      - "^name:?$"
+      - "address"
+      - "phone"
+      - "e-?mail"
+      - "tax id"
+    screenshot_to_llm: false

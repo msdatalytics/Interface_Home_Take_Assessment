@@ -1,0 +1,22 @@
+$ cua replay corebank.member.get_savings_balance -p member_id=100234 --escalation-timeout 180
+───────── FAILED corebank.member.get_savings_balance@1.0.0 on cu-alpha ─────────
+ run                     20261014T025717Z-replay-356edc                         
+ duration                6147 ms                                                
+ app version             4.2.1                                                  
+ failure                 APP_ERROR (application, retryable=True)                
+ message                 'server_runtime_error' persisted after 2 recovery      
+                         attempt(s): ASP.NET runtime error page (typically a    
+                         transient database listener failure).                  
+ step                    #3 click_link_view - None                              
+   evidence.screenshot   0020-failure-click_link_view.png                       
+   evidence.dom          ['dom-failure-click_link_view/frame-0-top.html',       
+                         'dom-failure-click_link_view/frame-1-banner.html',     
+                         'dom-failure-click_link_view/frame-2-nav.html',        
+                         'dom-failure-click_link_view/frame-3-main.html']       
+   evidence.observation  observation-failure-click_link_view.txt                
+ recovery                server_runtime_error @ click_link_view (attempt 1):    
+                         reloaded frame[name=main]                              
+ recovery                server_runtime_error @ click_link_view (attempt 2):    
+                         reloaded frame[name=main]                              
+ evidence                runs/20261014T025717Z-replay-356edc
+[exit 1]

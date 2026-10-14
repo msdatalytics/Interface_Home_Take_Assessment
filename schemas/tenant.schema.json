@@ -1,0 +1,181 @@
+{
+  "$defs": {
+    "CapabilityOverride": {
+      "additionalProperties": false,
+      "properties": {
+        "capability": {
+          "title": "Capability",
+          "type": "string"
+        },
+        "versions": {
+          "default": "*",
+          "title": "Versions",
+          "type": "string"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        },
+        "patches": {
+          "items": {
+            "$ref": "#/$defs/PatchOp"
+          },
+          "minItems": 1,
+          "title": "Patches",
+          "type": "array"
+        }
+      },
+      "required": [
+        "capability",
+        "reason",
+        "patches"
+      ],
+      "title": "CapabilityOverride",
+      "type": "object"
+    },
+    "PatchOp": {
+      "additionalProperties": false,
+      "properties": {
+        "op": {
+          "enum": [
+            "add",
+            "remove",
+            "replace"
+          ],
+          "title": "Op",
+          "type": "string"
+        },
+        "path": {
+          "pattern": "^(/[^/]*)+$",
+          "title": "Path",
+          "type": "string"
+        },
+        "value": {
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "op",
+        "path"
+      ],
+      "title": "PatchOp",
+      "type": "object"
+    },
+    "TenantApp": {
+      "additionalProperties": false,
+      "properties": {
+        "base_url": {
+          "title": "Base Url",
+          "type": "string"
+        },
+        "expected_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Expected Version"
+        },
+        "vocabulary": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Vocabulary",
+          "type": "object"
+        },
+        "secrets": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Vault key used in artifacts -> environment variable holding the value.",
+          "title": "Secrets",
+          "type": "object"
+        },
+        "overrides": {
+          "items": {
+            "$ref": "#/$defs/CapabilityOverride"
+          },
+          "title": "Overrides",
+          "type": "array"
+        }
+      },
+      "required": [
+        "base_url"
+      ],
+      "title": "TenantApp",
+      "type": "object"
+    },
+    "TenantMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "pattern": "^[a-z][a-z0-9-]{1,62}$",
+          "title": "Name",
+          "type": "string"
+        },
+        "display_name": {
+          "title": "Display Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "display_name"
+      ],
+      "title": "TenantMetadata",
+      "type": "object"
+    },
+    "TenantSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "apps": {
+          "description": "Keyed by app profile name.",
+          "patternProperties": {
+            "^[a-z][a-z0-9_]{0,63}$": {
+              "$ref": "#/$defs/TenantApp"
+            }
+          },
+          "title": "Apps",
+          "type": "object"
+        }
+      },
+      "required": [
+        "apps"
+      ],
+      "title": "TenantSpec",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "apiVersion": {
+      "const": "cua.dev/v1",
+      "default": "cua.dev/v1",
+      "title": "Apiversion",
+      "type": "string"
+    },
+    "kind": {
+      "const": "Tenant",
+      "default": "Tenant",
+      "title": "Kind",
+      "type": "string"
+    },
+    "metadata": {
+      "$ref": "#/$defs/TenantMetadata"
+    },
+    "spec": {
+      "$ref": "#/$defs/TenantSpec"
+    }
+  },
+  "required": [
+    "metadata",
+    "spec"
+  ],
+  "title": "Tenant",
+  "type": "object"
+}

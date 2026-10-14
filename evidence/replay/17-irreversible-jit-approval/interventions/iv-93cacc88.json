@@ -1,0 +1,33 @@
+{
+  "id": "iv-93cacc88",
+  "run_id": "20261014T025745Z-replay-a127ce",
+  "kind": "approval",
+  "status": "resolved",
+  "reason": "Approval required: 'Click button Submit' is an irreversible action",
+  "allowed": [
+    "approve",
+    "reject",
+    "step_done",
+    "abort"
+  ],
+  "context": {
+    "capability": "corebank.member.open_share_account@1.0.0",
+    "tenant": "cu-alpha",
+    "step_id": "click_button_submit",
+    "step_title": "Click button Submit",
+    "step_action": "click",
+    "target": "button Submit / Submit",
+    "expected": "url path of frame[name=main] matches /cb/subacct_submit.asp AND text \"Sub-Account Opened Successfully\" visible in frame[name=main]",
+    "failure": null,
+    "location": "top:/cb/main.asp, banner:/cb/banner.asp, nav:/cb/nav.asp, main:/cb/subacct_new.asp",
+    "screenshot": "interventions/iv-93cacc88.png",
+    "observation": "## frame (top) path=/cb/main.asp\n## frame \"banner\" path=/cb/banner.asp heading=\"Alpha Community Credit Union CoreBank Teller Workstation\"\n  [e1] \"Alpha Community Credit Union CoreBank Teller Workstation\" | [e2] \"User: [secret:corebank.username] Meridian CoreBank v4.2.1\"\n## frame \"nav\" path=/cb/nav.asp heading=\"Functions\"\n  [e3] \"Functions\"\n  [e4] link \"Member Inquiry\"\n  [e5] link \"Sub-Account Maintenance\"\n  [e6] link \"Reports\"\n  [e7] link \"Sign Off\"\n## frame \"main\" path=/cb/subacct_new.asp heading=\"Review New Sub-Account\"\n  [e8] \"Review New Sub-Account\"\n  [e9] \"Member:\" | [e10] \"[param:member_id]\"\n  [e11] \"Share Type:\" | [e12] \"Holiday Club\"\n  [e13] \"Nickname:\" | [e14] \"Ski Trip\"\n  [e15] \"Initial Deposit:\" | [e16] \"$75.00\"\n  [e17] \"Funding Source:\" | [e18] \"Cash Deposit\"\n  [e19] button \"Submit\"\n  [e20] button \"Edit\""
+  },
+  "created_at": "2026-10-14T02:57:53.037693Z",
+  "operator": "ops.jane",
+  "claimed_at": "2026-10-14T02:57:53.048098Z",
+  "resolved_at": "2026-10-14T02:57:54.056424Z",
+  "resolution": "approve",
+  "note": "verified with member by phone",
+  "human_actions": []
+}

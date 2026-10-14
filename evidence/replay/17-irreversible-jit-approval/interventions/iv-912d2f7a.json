@@ -1,0 +1,33 @@
+{
+  "id": "iv-912d2f7a",
+  "run_id": "20261014T025745Z-replay-a127ce",
+  "kind": "approval",
+  "status": "resolved",
+  "reason": "Approval required: 'Click button Continue' is an irreversible action",
+  "allowed": [
+    "approve",
+    "reject",
+    "step_done",
+    "abort"
+  ],
+  "context": {
+    "capability": "corebank.member.open_share_account@1.0.0",
+    "tenant": "cu-alpha",
+    "step_id": "click_button_continue",
+    "step_title": "Click button Continue",
+    "step_action": "click",
+    "target": "button Continue / Continue",
+    "expected": "url path of frame[name=main] matches /cb/subacct_new.asp AND text \"Review New Sub-Account\" visible in frame[name=main]",
+    "failure": null,
+    "location": "top:/cb/main.asp, banner:/cb/banner.asp, nav:/cb/nav.asp, main:/cb/subacct_new.asp",
+    "screenshot": "interventions/iv-912d2f7a.png",
+    "observation": "## frame (top) path=/cb/main.asp\n## frame \"banner\" path=/cb/banner.asp heading=\"Alpha Community Credit Union CoreBank Teller Workstation\"\n  [e1] \"Alpha Community Credit Union CoreBank Teller Workstation\" | [e2] \"User: [secret:corebank.username] Meridian CoreBank v4.2.1\"\n## frame \"nav\" path=/cb/nav.asp heading=\"Functions\"\n  [e3] \"Functions\"\n  [e4] link \"Member Inquiry\"\n  [e5] link \"Sub-Account Maintenance\"\n  [e6] link \"Reports\"\n  [e7] link \"Sign Off\"\n## frame \"main\" path=/cb/subacct_new.asp heading=\"Open Sub-Account\"\n  [e8] \"Open Sub-Account\"\n  [e9] \"[param:member_id]\"\n  [e10] \"Share Type:\" | [e11] combobox label=\"Share Type:\" value=\"Holiday Club\" options=[\"-- Select --\", \"Regular Savings\", \"Holiday Club\", \"Vacation Club\", \"Money Market\"]\n  [e12] \"Nickname:\" | [e13] textbox label=\"Nickname:\" value=\"Ski Trip\"\n  [e14] \"Initial Deposit:\" | [e15] textbox label=\"Initial Deposit:\" value=\"75.00\"\n  [e16] \"Funding Source:\" | [e17] combobox label=\"Funding Source:\" value=\"Cash Deposit\" options=[\"-- Select --\", \"Transfer from S00 - Primary Savings\", \"Cash Deposit\"]\n  [e18] button \"Continue\" | [e19] button \"Cancel\""
+  },
+  "created_at": "2026-10-14T02:57:51.056579Z",
+  "operator": "ops.jane",
+  "claimed_at": "2026-10-14T02:57:51.527535Z",
+  "resolved_at": "2026-10-14T02:57:52.535324Z",
+  "resolution": "approve",
+  "note": "verified with member by phone",
+  "human_actions": []
+}

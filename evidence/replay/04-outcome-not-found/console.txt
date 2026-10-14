@@ -1,0 +1,8 @@
+$ cua replay corebank.member.get_savings_balance -p member_id=999999 --escalation-timeout 180
+──── BUSINESS_OUTCOME corebank.member.get_savings_balance@1.0.0 on cu-alpha ────
+ run          20261014T025639Z-replay-03a80a                                  
+ duration     2737 ms                                                         
+ app version  4.2.1                                                           
+ outcome      record_not_found: No member matches the supplied member number. 
+ evidence     runs/20261014T025639Z-replay-03a80a
+[exit 2]

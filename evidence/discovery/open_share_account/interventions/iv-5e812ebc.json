@@ -1,0 +1,52 @@
+{
+  "id": "iv-5e812ebc",
+  "run_id": "20261014T024912Z-discovery-8233a7",
+  "kind": "approval",
+  "status": "resolved",
+  "reason": "Agent wants to click 'Submit' (irreversible): Submit the sub-account request to finalize the transaction.",
+  "allowed": [
+    "approve",
+    "reject",
+    "step_done",
+    "abort"
+  ],
+  "context": {
+    "goal": "For the member whose member number is [param:member_id], open a new sub-account of type [param:share_type] with nickname [param:nickname], funded by a cash deposit of [param:initial_deposit]. Review the details, submit the request, and read the confirmation number shown on the final confirmation screen.",
+    "capability": "corebank.member.open_share_account",
+    "step_title": "Click button Submit",
+    "recorded_steps": [
+      "Click link Sub-Account Maintenance",
+      "Enter textbox Member Number",
+      "Click button Search",
+      "Click link View",
+      "Click button Open Sub-Account",
+      "Choose combobox Share Type",
+      "Enter textbox Nickname",
+      "Enter textbox Initial Deposit",
+      "Choose combobox Funding Source",
+      "Click button Continue"
+    ],
+    "history": [
+      "1. click link \"Sub-Account Maintenance\" -> main: /cb/mbr_search.asp \"Member Inquiry\"",
+      "2. fill textbox Member Number with {{member_id}}",
+      "3. click button \"Search\" -> same page, 6 new item(s) appeared",
+      "4. click link \"View\" -> main: /cb/mbr_detail.asp \"Member Account Summary\"",
+      "5. click button \"Open Sub-Account\" -> main: /cb/subacct_new.asp \"Open Sub-Account\"",
+      "6. select combobox Share Type with {{share_type}}",
+      "7. fill textbox Nickname with {{nickname}}",
+      "8. fill textbox Initial Deposit with {{initial_deposit}}",
+      "9. select combobox Funding Source with 'Cash Deposit'",
+      "10. click button \"Continue\" -> main: /cb/subacct_new.asp \"Review New Sub-Account\""
+    ],
+    "location": "top:/cb/main.asp, banner:/cb/banner.asp, nav:/cb/nav.asp, main:/cb/subacct_new.asp",
+    "screenshot": "interventions/iv-5e812ebc.png",
+    "observation": "## frame (top) path=/cb/main.asp\n## frame \"banner\" path=/cb/banner.asp heading=\"Alpha Community Credit Union CoreBank Teller Workstation\"\n  [e1] \"Alpha Community Credit Union CoreBank Teller Workstation\" | [e2] \"User: [secret:corebank.username] Meridian CoreBank v4.2.1\"\n## frame \"nav\" path=/cb/nav.asp heading=\"Functions\"\n  [e3] \"Functions\"\n  [e4] link \"Member Inquiry\"\n  [e5] link \"Sub-Account Maintenance\"\n  [e6] link \"Reports\"\n  [e7] link \"Sign Off\"\n## frame \"main\" path=/cb/subacct_new.asp heading=\"Review New Sub-Account\"\n  [e8] \"Review New Sub-Account\"\n  [e9] \"Member:\" | [e10] \"[param:member_id]\"\n  [e11] \"Share Type:\" | [e12] \"Vacation Club\"\n  [e13] \"Nickname:\" | [e14] \"Summer Trip\"\n  [e15] \"Initial Deposit:\" | [e16] \"$250.00\"\n  [e17] \"Funding Source:\" | [e18] \"Cash Deposit\"\n  [e19] button \"Submit\"\n  [e20] button \"Edit\""
+  },
+  "created_at": "2026-10-14T02:55:12.066396Z",
+  "operator": "ops.jane",
+  "claimed_at": "2026-10-14T02:55:12.098042Z",
+  "resolved_at": "2026-10-14T02:55:13.104780Z",
+  "resolution": "approve",
+  "note": "reviewed: test member, $250 cash",
+  "human_actions": []
+}

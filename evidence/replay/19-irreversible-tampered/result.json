@@ -1,0 +1,27 @@
+{
+  "run_id": "20261014T025802Z-replay-a8e296",
+  "capability": "corebank.member.open_share_account@1.0.0",
+  "digest": "sha256:d559eff9c55eb9856e881e0ba66a6b559f4830574b5ce0d5fd6b7d65b71510ce",
+  "tenant": "cu-alpha",
+  "tenant_overrides": [],
+  "status": "failed",
+  "outputs": {},
+  "failure": {
+    "code": "APPROVAL_REQUIRED",
+    "category": "caller",
+    "message": "step 'click_button_continue' (Click button Continue) is irreversible: irreversible action requires an approved capability (status/digest) (the artifact was modified after it was approved: its digest no longer matches the approval). Approve the capability (cua approve) or run with --on-failure escalate for a just-in-time operator approval.",
+    "retryable": false,
+    "step_id": "click_button_continue",
+    "step_title": "Click button Continue",
+    "locator_attempts": [],
+    "evidence": {}
+  },
+  "recoveries": [],
+  "drift": [],
+  "interventions": [],
+  "steps": [],
+  "human_assisted": false,
+  "started_at": "2026-10-14T02:58:02.519914Z",
+  "duration_ms": 1,
+  "evidence_dir": "runs/20261014T025802Z-replay-a8e296"
+}

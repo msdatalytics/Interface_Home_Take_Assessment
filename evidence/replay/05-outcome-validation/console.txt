@@ -1,0 +1,8 @@
+$ cua replay corebank.member.get_savings_balance -p member_id=123 --escalation-timeout 180
+──── BUSINESS_OUTCOME corebank.member.get_savings_balance@1.0.0 on cu-alpha ────
+ run          20261014T025642Z-replay-75ea8f                          
+ duration     2765 ms                                                 
+ app version  4.2.1                                                   
+ outcome      validation_error: Member Number must be 6 to 10 digits. 
+ evidence     runs/20261014T025642Z-replay-75ea8f
+[exit 2]

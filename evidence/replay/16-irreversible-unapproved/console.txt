@@ -1,0 +1,12 @@
+$ cua replay corebank.member.open_share_account -p member_id=100591 -p "share_type=Holiday Club" -p "nickname=Ski Trip" -p initial_deposit=75 --escalation-timeout 180
+───────── FAILED corebank.member.open_share_account@1.0.0 on cu-alpha ──────────
+ run       20261014T025745Z-replay-fd3cae                                       
+ duration  0 ms                                                                 
+ failure   APPROVAL_REQUIRED (caller, retryable=False)                          
+ message   step 'click_button_continue' (Click button Continue) is              
+           irreversible: irreversible action requires an approved capability    
+           (status/digest). Approve the capability (cua approve) or run with    
+           --on-failure escalate for a just-in-time operator approval.          
+ step      #None click_button_continue - Click button Continue                  
+ evidence  runs/20261014T025745Z-replay-fd3cae
+[exit 1]

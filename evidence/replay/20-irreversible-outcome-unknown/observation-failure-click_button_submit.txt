@@ -1,0 +1,13 @@
+## frame (top) path=/cb/main.asp
+## frame "banner" path=/cb/banner.asp heading="Alpha Community Credit Union CoreBank Teller Workstation"
+  [e1] "Alpha Community Credit Union CoreBank Teller Workstation" | [e2] "User: [secret:corebank.username] Meridian CoreBank v4.2.1"
+## frame "nav" path=/cb/nav.asp heading="Functions"
+  [e3] "Functions"
+  [e4] link "Member Inquiry"
+  [e5] link "Sub-Account Maintenance"
+  [e6] link "Reports"
+  [e7] link "Sign Off"
+## frame "main" path=/cb/subacct_submit.asp heading="Server Error in '/cb' Application."
+  [e8] "Server Error in '/cb' Application."
+  [e9] "Runtime Error"
+  [e10] "Description: An application error occurred on the server while processing /cb/subacct_submit.asp. Exception Details: System.Data.OracleClient.OracleException: ORA-12541: TNS:no listener"

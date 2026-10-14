@@ -1,0 +1,54 @@
+<!-- http://127.0.0.1:8401/cb/mbr_search.asp -->
+<!DOCTYPE html>
+<html><head>
+<title>CoreBank</title>
+<style type="text/css">
+  body { font-family: Tahoma, Verdana, Arial, sans-serif; font-size: 11px; background: #ece9d8; margin: 6px; }
+  td { font-size: 11px; }
+  .lbl { color: #333; text-align: right; padding-right: 6px; white-space: nowrap; }
+  .hdr td { background: #d4d0c8; font-weight: bold; border-bottom: 1px solid #808080; }
+  .grid td { border: 1px solid #a0a0a0; padding: 2px 6px; }
+  .btn { font-size: 11px; padding: 1px 8px; }
+  .ttl { background: #1f3a5f; color: #fff; padding: 3px 6px; }
+</style>
+<script type="text/javascript">
+  function __doPostBack(target) {
+    var f = document.forms["aspnetForm"];
+    f.__EVENTTARGET.value = target;
+    f.submit();
+  }
+</script>
+</head>
+<body>
+
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tbody><tr><td class="ttl"><font size="3"><b>Member Inquiry</b></font></td></tr>
+</tbody></table>
+<br>
+<form name="aspnetForm" method="get" action="mbr_search.asp">
+<input type="hidden" name="__EVENTTARGET" value="" style="">
+<input type="hidden" name="sid" value="fffcbc9777c1" style="">
+<table border="0" cellpadding="3" cellspacing="0">
+  <tbody><tr>
+    <td class="lbl">Member Number:</td>
+    <td><input type="text" name="ctl00$cph$txtMbrNo" id="ctl00_cph_txtMbrNo" size="14" maxlength="12" value="[REDACTED]" onkeydown="if (event.keyCode == 13) { __doPostBack('btnSearch'); return false; }" style=""></td>
+    <td><input type="button" class="btn" value="Search" onclick="__doPostBack('btnSearch')" style=""></td>
+  </tr>
+</tbody></table>
+</form>
+
+
+
+<div style="position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,0.45);z-index:1000" onclick="return false;">
+  <div style="position:absolute;left:50%;top:30%;margin-left:-170px;width:340px;background:#ece9d8;border:2px outset #fff;padding:10px">
+    <b>Duplicate Session Detected</b><br><br>
+    Another workstation is signed on with your User ID. Continue this session?<br><br>
+    <center>
+      <input type="button" class="btn" value="Continue Session" onclick="this.parentNode.parentNode.parentNode.style.display='none'" style="">
+      <input type="button" class="btn" value="End Other Session" onclick="this.parentNode.parentNode.parentNode.style.display='none'" style="">
+    </center>
+  </div>
+</div>
+
+
+</body></html>

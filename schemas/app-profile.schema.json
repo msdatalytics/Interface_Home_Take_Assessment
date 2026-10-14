@@ -1,0 +1,1636 @@
+{
+  "$defs": {
+    "AllOf": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "all_of",
+          "default": "all_of",
+          "title": "Kind",
+          "type": "string"
+        },
+        "conditions": {
+          "items": {
+            "discriminator": {
+              "mapping": {
+                "all_of": "#/$defs/AllOf",
+                "any_of": "#/$defs/AnyOf",
+                "element_visible": "#/$defs/ElementVisible",
+                "text_visible": "#/$defs/TextVisible",
+                "url_matches": "#/$defs/UrlMatches"
+              },
+              "propertyName": "kind"
+            },
+            "oneOf": [
+              {
+                "$ref": "#/$defs/TextVisible"
+              },
+              {
+                "$ref": "#/$defs/ElementVisible"
+              },
+              {
+                "$ref": "#/$defs/UrlMatches"
+              },
+              {
+                "$ref": "#/$defs/AllOf"
+              },
+              {
+                "$ref": "#/$defs/AnyOf"
+              }
+            ]
+          },
+          "minItems": 1,
+          "title": "Conditions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "conditions"
+      ],
+      "title": "AllOf",
+      "type": "object"
+    },
+    "AnyOf": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "any_of",
+          "default": "any_of",
+          "title": "Kind",
+          "type": "string"
+        },
+        "conditions": {
+          "items": {
+            "discriminator": {
+              "mapping": {
+                "all_of": "#/$defs/AllOf",
+                "any_of": "#/$defs/AnyOf",
+                "element_visible": "#/$defs/ElementVisible",
+                "text_visible": "#/$defs/TextVisible",
+                "url_matches": "#/$defs/UrlMatches"
+              },
+              "propertyName": "kind"
+            },
+            "oneOf": [
+              {
+                "$ref": "#/$defs/TextVisible"
+              },
+              {
+                "$ref": "#/$defs/ElementVisible"
+              },
+              {
+                "$ref": "#/$defs/UrlMatches"
+              },
+              {
+                "$ref": "#/$defs/AllOf"
+              },
+              {
+                "$ref": "#/$defs/AnyOf"
+              }
+            ]
+          },
+          "minItems": 1,
+          "title": "Conditions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "conditions"
+      ],
+      "title": "AnyOf",
+      "type": "object"
+    },
+    "AppProfileMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "pattern": "^[a-z][a-z0-9_]{0,63}$",
+          "title": "Name",
+          "type": "string"
+        },
+        "version": {
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "title": "Version",
+          "type": "string"
+        },
+        "vendor": {
+          "title": "Vendor",
+          "type": "string"
+        },
+        "product": {
+          "title": "Product",
+          "type": "string"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        }
+      },
+      "required": [
+        "name",
+        "version",
+        "vendor",
+        "product"
+      ],
+      "title": "AppProfileMetadata",
+      "type": "object"
+    },
+    "AppProfileSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "session": {
+          "$ref": "#/$defs/SessionSpec"
+        },
+        "handlers": {
+          "items": {
+            "$ref": "#/$defs/StateHandler"
+          },
+          "title": "Handlers",
+          "type": "array"
+        },
+        "outcomes": {
+          "items": {
+            "$ref": "#/$defs/OutcomeSpec"
+          },
+          "title": "Outcomes",
+          "type": "array"
+        },
+        "version_probe": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/VersionProbe"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "session"
+      ],
+      "title": "AppProfileSpec",
+      "type": "object"
+    },
+    "ClickStep": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[a-z][a-z0-9_]{0,63}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "title": {
+          "description": "Intent of the step in operator language.",
+          "title": "Title",
+          "type": "string"
+        },
+        "risk": {
+          "$ref": "#/$defs/Risk",
+          "default": "read"
+        },
+        "expect": {
+          "anyOf": [
+            {
+              "discriminator": {
+                "mapping": {
+                  "all_of": "#/$defs/AllOf",
+                  "any_of": "#/$defs/AnyOf",
+                  "element_visible": "#/$defs/ElementVisible",
+                  "text_visible": "#/$defs/TextVisible",
+                  "url_matches": "#/$defs/UrlMatches"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/TextVisible"
+                },
+                {
+                  "$ref": "#/$defs/ElementVisible"
+                },
+                {
+                  "$ref": "#/$defs/UrlMatches"
+                },
+                {
+                  "$ref": "#/$defs/AllOf"
+                },
+                {
+                  "$ref": "#/$defs/AnyOf"
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Post-condition checkpoint: the state this step must lead to.",
+          "title": "Expect"
+        },
+        "timeout_ms": {
+          "default": 15000,
+          "maximum": 120000,
+          "minimum": 500,
+          "title": "Timeout Ms",
+          "type": "integer"
+        },
+        "source": {
+          "default": "llm",
+          "description": "Who produced this step during recording.",
+          "enum": [
+            "llm",
+            "human",
+            "author"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "rationale": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Why the step exists (from the discovery run).",
+          "title": "Rationale"
+        },
+        "action": {
+          "const": "click",
+          "default": "click",
+          "title": "Action",
+          "type": "string"
+        },
+        "target": {
+          "$ref": "#/$defs/Target"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "target"
+      ],
+      "title": "ClickStep",
+      "type": "object"
+    },
+    "CssLocator": {
+      "additionalProperties": false,
+      "description": "Structural selector. Last resort: brittle across versions and tenant-specific (generated\ncontrol names differ per installation). Kept so a recording is never left without a fallback.",
+      "properties": {
+        "strategy": {
+          "const": "css",
+          "default": "css",
+          "title": "Strategy",
+          "type": "string"
+        },
+        "selector": {
+          "title": "Selector",
+          "type": "string"
+        }
+      },
+      "required": [
+        "selector"
+      ],
+      "title": "CssLocator",
+      "type": "object"
+    },
+    "ElementVisible": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "element_visible",
+          "default": "element_visible",
+          "title": "Kind",
+          "type": "string"
+        },
+        "target": {
+          "$ref": "#/$defs/Target"
+        }
+      },
+      "required": [
+        "target"
+      ],
+      "title": "ElementVisible",
+      "type": "object"
+    },
+    "ExtractStep": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[a-z][a-z0-9_]{0,63}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "title": {
+          "description": "Intent of the step in operator language.",
+          "title": "Title",
+          "type": "string"
+        },
+        "risk": {
+          "$ref": "#/$defs/Risk",
+          "default": "read"
+        },
+        "expect": {
+          "anyOf": [
+            {
+              "discriminator": {
+                "mapping": {
+                  "all_of": "#/$defs/AllOf",
+                  "any_of": "#/$defs/AnyOf",
+                  "element_visible": "#/$defs/ElementVisible",
+                  "text_visible": "#/$defs/TextVisible",
+                  "url_matches": "#/$defs/UrlMatches"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/TextVisible"
+                },
+                {
+                  "$ref": "#/$defs/ElementVisible"
+                },
+                {
+                  "$ref": "#/$defs/UrlMatches"
+                },
+                {
+                  "$ref": "#/$defs/AllOf"
+                },
+                {
+                  "$ref": "#/$defs/AnyOf"
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Post-condition checkpoint: the state this step must lead to.",
+          "title": "Expect"
+        },
+        "timeout_ms": {
+          "default": 15000,
+          "maximum": 120000,
+          "minimum": 500,
+          "title": "Timeout Ms",
+          "type": "integer"
+        },
+        "source": {
+          "default": "llm",
+          "description": "Who produced this step during recording.",
+          "enum": [
+            "llm",
+            "human",
+            "author"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "rationale": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Why the step exists (from the discovery run).",
+          "title": "Rationale"
+        },
+        "action": {
+          "const": "extract",
+          "default": "extract",
+          "title": "Action",
+          "type": "string"
+        },
+        "target": {
+          "$ref": "#/$defs/Target"
+        },
+        "output": {
+          "description": "Declared output this step populates.",
+          "title": "Output",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "target",
+        "output"
+      ],
+      "title": "ExtractStep",
+      "type": "object"
+    },
+    "FillStep": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[a-z][a-z0-9_]{0,63}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "title": {
+          "description": "Intent of the step in operator language.",
+          "title": "Title",
+          "type": "string"
+        },
+        "risk": {
+          "$ref": "#/$defs/Risk",
+          "default": "read"
+        },
+        "expect": {
+          "anyOf": [
+            {
+              "discriminator": {
+                "mapping": {
+                  "all_of": "#/$defs/AllOf",
+                  "any_of": "#/$defs/AnyOf",
+                  "element_visible": "#/$defs/ElementVisible",
+                  "text_visible": "#/$defs/TextVisible",
+                  "url_matches": "#/$defs/UrlMatches"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/TextVisible"
+                },
+                {
+                  "$ref": "#/$defs/ElementVisible"
+                },
+                {
+                  "$ref": "#/$defs/UrlMatches"
+                },
+                {
+                  "$ref": "#/$defs/AllOf"
+                },
+                {
+                  "$ref": "#/$defs/AnyOf"
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Post-condition checkpoint: the state this step must lead to.",
+          "title": "Expect"
+        },
+        "timeout_ms": {
+          "default": 15000,
+          "maximum": 120000,
+          "minimum": 500,
+          "title": "Timeout Ms",
+          "type": "integer"
+        },
+        "source": {
+          "default": "llm",
+          "description": "Who produced this step during recording.",
+          "enum": [
+            "llm",
+            "human",
+            "author"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "rationale": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Why the step exists (from the discovery run).",
+          "title": "Rationale"
+        },
+        "action": {
+          "const": "fill",
+          "default": "fill",
+          "title": "Action",
+          "type": "string"
+        },
+        "target": {
+          "$ref": "#/$defs/Target"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ParamValue"
+            },
+            {
+              "$ref": "#/$defs/SecretValue"
+            },
+            {
+              "$ref": "#/$defs/LiteralValue"
+            }
+          ],
+          "title": "Value"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "target",
+        "value"
+      ],
+      "title": "FillStep",
+      "type": "object"
+    },
+    "FrameRef": {
+      "additionalProperties": false,
+      "description": "Identifies a frame/window region. ``None`` on a :class:`Target` means \"search all frames\".",
+      "properties": {
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Frame name attribute (e.g. 'main').",
+          "title": "Name"
+        },
+        "url_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "fnmatch-style glob on the frame URL path.",
+          "title": "Url Path"
+        }
+      },
+      "title": "FrameRef",
+      "type": "object"
+    },
+    "HandlerKind": {
+      "enum": [
+        "interstitial",
+        "session_expired",
+        "transient_error",
+        "fatal"
+      ],
+      "title": "HandlerKind",
+      "type": "string"
+    },
+    "LabelLocator": {
+      "additionalProperties": false,
+      "description": "A form control identified by the visible label a human reads next to it - whether or not\nthe label is programmatically associated (``<label for>``, ``aria-labelledby``) or merely sits\nin the adjacent table cell, which is the norm in legacy server-rendered apps.",
+      "properties": {
+        "strategy": {
+          "const": "label",
+          "default": "label",
+          "title": "Strategy",
+          "type": "string"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "role": {
+          "description": "Control role: textbox | combobox | checkbox | radio | button",
+          "title": "Role",
+          "type": "string"
+        }
+      },
+      "required": [
+        "label",
+        "role"
+      ],
+      "title": "LabelLocator",
+      "type": "object"
+    },
+    "LabelValueLocator": {
+      "additionalProperties": false,
+      "description": "The value displayed next to a label in a key/value layout (``Confirmation Number: CB-1``).",
+      "properties": {
+        "strategy": {
+          "const": "label_value",
+          "default": "label_value",
+          "title": "Strategy",
+          "type": "string"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        }
+      },
+      "required": [
+        "label"
+      ],
+      "title": "LabelValueLocator",
+      "type": "object"
+    },
+    "LiteralValue": {
+      "additionalProperties": false,
+      "properties": {
+        "literal": {
+          "description": "Constant, non-sensitive value (e.g. a fixed dropdown choice).",
+          "title": "Literal",
+          "type": "string"
+        }
+      },
+      "required": [
+        "literal"
+      ],
+      "title": "LiteralValue",
+      "type": "object"
+    },
+    "NavigateStep": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[a-z][a-z0-9_]{0,63}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "title": {
+          "description": "Intent of the step in operator language.",
+          "title": "Title",
+          "type": "string"
+        },
+        "risk": {
+          "$ref": "#/$defs/Risk",
+          "default": "read"
+        },
+        "expect": {
+          "anyOf": [
+            {
+              "discriminator": {
+                "mapping": {
+                  "all_of": "#/$defs/AllOf",
+                  "any_of": "#/$defs/AnyOf",
+                  "element_visible": "#/$defs/ElementVisible",
+                  "text_visible": "#/$defs/TextVisible",
+                  "url_matches": "#/$defs/UrlMatches"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/TextVisible"
+                },
+                {
+                  "$ref": "#/$defs/ElementVisible"
+                },
+                {
+                  "$ref": "#/$defs/UrlMatches"
+                },
+                {
+                  "$ref": "#/$defs/AllOf"
+                },
+                {
+                  "$ref": "#/$defs/AnyOf"
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Post-condition checkpoint: the state this step must lead to.",
+          "title": "Expect"
+        },
+        "timeout_ms": {
+          "default": 15000,
+          "maximum": 120000,
+          "minimum": 500,
+          "title": "Timeout Ms",
+          "type": "integer"
+        },
+        "source": {
+          "default": "llm",
+          "description": "Who produced this step during recording.",
+          "enum": [
+            "llm",
+            "human",
+            "author"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "rationale": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Why the step exists (from the discovery run).",
+          "title": "Rationale"
+        },
+        "action": {
+          "const": "navigate",
+          "default": "navigate",
+          "title": "Action",
+          "type": "string"
+        },
+        "path": {
+          "description": "Path relative to the tenant's base URL.",
+          "title": "Path",
+          "type": "string"
+        },
+        "frame": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FrameRef"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "path"
+      ],
+      "title": "NavigateStep",
+      "type": "object"
+    },
+    "OutcomeSpec": {
+      "additionalProperties": false,
+      "description": "A *business* outcome: a legitimate answer the caller must handle (not a crash).",
+      "properties": {
+        "code": {
+          "pattern": "^[a-z][a-z0-9_]{0,63}$",
+          "title": "Code",
+          "type": "string"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "detect": {
+          "discriminator": {
+            "mapping": {
+              "all_of": "#/$defs/AllOf",
+              "any_of": "#/$defs/AnyOf",
+              "element_visible": "#/$defs/ElementVisible",
+              "text_visible": "#/$defs/TextVisible",
+              "url_matches": "#/$defs/UrlMatches"
+            },
+            "propertyName": "kind"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/TextVisible"
+            },
+            {
+              "$ref": "#/$defs/ElementVisible"
+            },
+            {
+              "$ref": "#/$defs/UrlMatches"
+            },
+            {
+              "$ref": "#/$defs/AllOf"
+            },
+            {
+              "$ref": "#/$defs/AnyOf"
+            }
+          ],
+          "title": "Detect"
+        },
+        "retryable": {
+          "default": false,
+          "description": "Whether the caller may retry with the same inputs.",
+          "title": "Retryable",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "code",
+        "description",
+        "detect"
+      ],
+      "title": "OutcomeSpec",
+      "type": "object"
+    },
+    "ParamValue": {
+      "additionalProperties": false,
+      "properties": {
+        "param": {
+          "description": "Name of a declared input parameter.",
+          "title": "Param",
+          "type": "string"
+        }
+      },
+      "required": [
+        "param"
+      ],
+      "title": "ParamValue",
+      "type": "object"
+    },
+    "PressStep": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[a-z][a-z0-9_]{0,63}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "title": {
+          "description": "Intent of the step in operator language.",
+          "title": "Title",
+          "type": "string"
+        },
+        "risk": {
+          "$ref": "#/$defs/Risk",
+          "default": "read"
+        },
+        "expect": {
+          "anyOf": [
+            {
+              "discriminator": {
+                "mapping": {
+                  "all_of": "#/$defs/AllOf",
+                  "any_of": "#/$defs/AnyOf",
+                  "element_visible": "#/$defs/ElementVisible",
+                  "text_visible": "#/$defs/TextVisible",
+                  "url_matches": "#/$defs/UrlMatches"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/TextVisible"
+                },
+                {
+                  "$ref": "#/$defs/ElementVisible"
+                },
+                {
+                  "$ref": "#/$defs/UrlMatches"
+                },
+                {
+                  "$ref": "#/$defs/AllOf"
+                },
+                {
+                  "$ref": "#/$defs/AnyOf"
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Post-condition checkpoint: the state this step must lead to.",
+          "title": "Expect"
+        },
+        "timeout_ms": {
+          "default": 15000,
+          "maximum": 120000,
+          "minimum": 500,
+          "title": "Timeout Ms",
+          "type": "integer"
+        },
+        "source": {
+          "default": "llm",
+          "description": "Who produced this step during recording.",
+          "enum": [
+            "llm",
+            "human",
+            "author"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "rationale": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Why the step exists (from the discovery run).",
+          "title": "Rationale"
+        },
+        "action": {
+          "const": "press",
+          "default": "press",
+          "title": "Action",
+          "type": "string"
+        },
+        "target": {
+          "$ref": "#/$defs/Target"
+        },
+        "key": {
+          "pattern": "^(Enter|Tab|Escape|Space|ArrowDown|ArrowUp)$",
+          "title": "Key",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "target",
+        "key"
+      ],
+      "title": "PressStep",
+      "type": "object"
+    },
+    "Risk": {
+      "description": "Side-effect class of a step. Ordered: ``read < write < irreversible``.\n\n* ``read``         - no server-side state change (navigation, search, typing into a form).\n* ``write``        - changes state but is reversible / not yet committed (e.g. \"Continue\" to a review page).\n* ``irreversible`` - commits a business transaction (submit, post, transfer, close, delete).",
+      "enum": [
+        "read",
+        "write",
+        "irreversible"
+      ],
+      "title": "Risk",
+      "type": "string"
+    },
+    "RoleLocator": {
+      "additionalProperties": false,
+      "description": "Accessibility role + accessible name. Survives layout/CSS changes; maps 1:1 to desktop\naccessibility APIs. Unavailable when the control has no accessible name (common in legacy).",
+      "properties": {
+        "strategy": {
+          "const": "role",
+          "default": "role",
+          "title": "Strategy",
+          "type": "string"
+        },
+        "role": {
+          "title": "Role",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "role",
+        "name"
+      ],
+      "title": "RoleLocator",
+      "type": "object"
+    },
+    "SecretValue": {
+      "additionalProperties": false,
+      "properties": {
+        "secret": {
+          "description": "Vault key; resolved inside the surface boundary only.",
+          "title": "Secret",
+          "type": "string"
+        }
+      },
+      "required": [
+        "secret"
+      ],
+      "title": "SecretValue",
+      "type": "object"
+    },
+    "SelectStep": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[a-z][a-z0-9_]{0,63}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "title": {
+          "description": "Intent of the step in operator language.",
+          "title": "Title",
+          "type": "string"
+        },
+        "risk": {
+          "$ref": "#/$defs/Risk",
+          "default": "read"
+        },
+        "expect": {
+          "anyOf": [
+            {
+              "discriminator": {
+                "mapping": {
+                  "all_of": "#/$defs/AllOf",
+                  "any_of": "#/$defs/AnyOf",
+                  "element_visible": "#/$defs/ElementVisible",
+                  "text_visible": "#/$defs/TextVisible",
+                  "url_matches": "#/$defs/UrlMatches"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/TextVisible"
+                },
+                {
+                  "$ref": "#/$defs/ElementVisible"
+                },
+                {
+                  "$ref": "#/$defs/UrlMatches"
+                },
+                {
+                  "$ref": "#/$defs/AllOf"
+                },
+                {
+                  "$ref": "#/$defs/AnyOf"
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Post-condition checkpoint: the state this step must lead to.",
+          "title": "Expect"
+        },
+        "timeout_ms": {
+          "default": 15000,
+          "maximum": 120000,
+          "minimum": 500,
+          "title": "Timeout Ms",
+          "type": "integer"
+        },
+        "source": {
+          "default": "llm",
+          "description": "Who produced this step during recording.",
+          "enum": [
+            "llm",
+            "human",
+            "author"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "rationale": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Why the step exists (from the discovery run).",
+          "title": "Rationale"
+        },
+        "action": {
+          "const": "select",
+          "default": "select",
+          "title": "Action",
+          "type": "string"
+        },
+        "target": {
+          "$ref": "#/$defs/Target"
+        },
+        "option": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ParamValue"
+            },
+            {
+              "$ref": "#/$defs/SecretValue"
+            },
+            {
+              "$ref": "#/$defs/LiteralValue"
+            }
+          ],
+          "description": "Visible option label to choose.",
+          "title": "Option"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "target",
+        "option"
+      ],
+      "title": "SelectStep",
+      "type": "object"
+    },
+    "SessionSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "entry_path": {
+          "title": "Entry Path",
+          "type": "string"
+        },
+        "logged_out_when": {
+          "discriminator": {
+            "mapping": {
+              "all_of": "#/$defs/AllOf",
+              "any_of": "#/$defs/AnyOf",
+              "element_visible": "#/$defs/ElementVisible",
+              "text_visible": "#/$defs/TextVisible",
+              "url_matches": "#/$defs/UrlMatches"
+            },
+            "propertyName": "kind"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/TextVisible"
+            },
+            {
+              "$ref": "#/$defs/ElementVisible"
+            },
+            {
+              "$ref": "#/$defs/UrlMatches"
+            },
+            {
+              "$ref": "#/$defs/AllOf"
+            },
+            {
+              "$ref": "#/$defs/AnyOf"
+            }
+          ],
+          "title": "Logged Out When"
+        },
+        "logged_in_when": {
+          "discriminator": {
+            "mapping": {
+              "all_of": "#/$defs/AllOf",
+              "any_of": "#/$defs/AnyOf",
+              "element_visible": "#/$defs/ElementVisible",
+              "text_visible": "#/$defs/TextVisible",
+              "url_matches": "#/$defs/UrlMatches"
+            },
+            "propertyName": "kind"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/TextVisible"
+            },
+            {
+              "$ref": "#/$defs/ElementVisible"
+            },
+            {
+              "$ref": "#/$defs/UrlMatches"
+            },
+            {
+              "$ref": "#/$defs/AllOf"
+            },
+            {
+              "$ref": "#/$defs/AnyOf"
+            }
+          ],
+          "title": "Logged In When"
+        },
+        "login_steps": {
+          "items": {
+            "discriminator": {
+              "mapping": {
+                "click": "#/$defs/ClickStep",
+                "extract": "#/$defs/ExtractStep",
+                "fill": "#/$defs/FillStep",
+                "navigate": "#/$defs/NavigateStep",
+                "press": "#/$defs/PressStep",
+                "select": "#/$defs/SelectStep"
+              },
+              "propertyName": "action"
+            },
+            "oneOf": [
+              {
+                "$ref": "#/$defs/NavigateStep"
+              },
+              {
+                "$ref": "#/$defs/ClickStep"
+              },
+              {
+                "$ref": "#/$defs/FillStep"
+              },
+              {
+                "$ref": "#/$defs/SelectStep"
+              },
+              {
+                "$ref": "#/$defs/PressStep"
+              },
+              {
+                "$ref": "#/$defs/ExtractStep"
+              }
+            ]
+          },
+          "minItems": 1,
+          "title": "Login Steps",
+          "type": "array"
+        }
+      },
+      "required": [
+        "entry_path",
+        "logged_out_when",
+        "logged_in_when",
+        "login_steps"
+      ],
+      "title": "SessionSpec",
+      "type": "object"
+    },
+    "StateHandler": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[a-z][a-z0-9_]{0,63}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/HandlerKind"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "detect": {
+          "discriminator": {
+            "mapping": {
+              "all_of": "#/$defs/AllOf",
+              "any_of": "#/$defs/AnyOf",
+              "element_visible": "#/$defs/ElementVisible",
+              "text_visible": "#/$defs/TextVisible",
+              "url_matches": "#/$defs/UrlMatches"
+            },
+            "propertyName": "kind"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/TextVisible"
+            },
+            {
+              "$ref": "#/$defs/ElementVisible"
+            },
+            {
+              "$ref": "#/$defs/UrlMatches"
+            },
+            {
+              "$ref": "#/$defs/AllOf"
+            },
+            {
+              "$ref": "#/$defs/AnyOf"
+            }
+          ],
+          "title": "Detect"
+        },
+        "steps": {
+          "description": "Recovery actions (interstitials).",
+          "items": {
+            "discriminator": {
+              "mapping": {
+                "click": "#/$defs/ClickStep",
+                "extract": "#/$defs/ExtractStep",
+                "fill": "#/$defs/FillStep",
+                "navigate": "#/$defs/NavigateStep",
+                "press": "#/$defs/PressStep",
+                "select": "#/$defs/SelectStep"
+              },
+              "propertyName": "action"
+            },
+            "oneOf": [
+              {
+                "$ref": "#/$defs/NavigateStep"
+              },
+              {
+                "$ref": "#/$defs/ClickStep"
+              },
+              {
+                "$ref": "#/$defs/FillStep"
+              },
+              {
+                "$ref": "#/$defs/SelectStep"
+              },
+              {
+                "$ref": "#/$defs/PressStep"
+              },
+              {
+                "$ref": "#/$defs/ExtractStep"
+              }
+            ]
+          },
+          "title": "Steps",
+          "type": "array"
+        },
+        "reload_frame": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FrameRef"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Frame to reload (transient errors)."
+        },
+        "max_attempts": {
+          "default": 2,
+          "maximum": 5,
+          "minimum": 1,
+          "title": "Max Attempts",
+          "type": "integer"
+        },
+        "backoff_ms": {
+          "default": 750,
+          "maximum": 30000,
+          "minimum": 0,
+          "title": "Backoff Ms",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "description",
+        "detect"
+      ],
+      "title": "StateHandler",
+      "type": "object"
+    },
+    "TableCellLocator": {
+      "additionalProperties": false,
+      "description": "A cell addressed by (row key text, column header text) - the way an operator reads a grid.\nRobust to row reordering and added columns.",
+      "properties": {
+        "strategy": {
+          "const": "table_cell",
+          "default": "table_cell",
+          "title": "Strategy",
+          "type": "string"
+        },
+        "row": {
+          "description": "Text of any cell in the target row (the row key).",
+          "title": "Row",
+          "type": "string"
+        },
+        "column": {
+          "description": "Header text of the target column.",
+          "title": "Column",
+          "type": "string"
+        }
+      },
+      "required": [
+        "row",
+        "column"
+      ],
+      "title": "TableCellLocator",
+      "type": "object"
+    },
+    "Target": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "description": "What a human would call this control.",
+          "title": "Description",
+          "type": "string"
+        },
+        "frame": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FrameRef"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "locators": {
+          "items": {
+            "discriminator": {
+              "mapping": {
+                "css": "#/$defs/CssLocator",
+                "label": "#/$defs/LabelLocator",
+                "label_value": "#/$defs/LabelValueLocator",
+                "role": "#/$defs/RoleLocator",
+                "table_cell": "#/$defs/TableCellLocator",
+                "text": "#/$defs/TextLocator"
+              },
+              "propertyName": "strategy"
+            },
+            "oneOf": [
+              {
+                "$ref": "#/$defs/RoleLocator"
+              },
+              {
+                "$ref": "#/$defs/LabelLocator"
+              },
+              {
+                "$ref": "#/$defs/TableCellLocator"
+              },
+              {
+                "$ref": "#/$defs/LabelValueLocator"
+              },
+              {
+                "$ref": "#/$defs/TextLocator"
+              },
+              {
+                "$ref": "#/$defs/CssLocator"
+              }
+            ]
+          },
+          "minItems": 1,
+          "title": "Locators",
+          "type": "array"
+        }
+      },
+      "required": [
+        "description",
+        "locators"
+      ],
+      "title": "Target",
+      "type": "object"
+    },
+    "TextLocator": {
+      "additionalProperties": false,
+      "description": "Exact visible text, optionally constrained to a role (e.g. a link).",
+      "properties": {
+        "strategy": {
+          "const": "text",
+          "default": "text",
+          "title": "Strategy",
+          "type": "string"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "role": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Role"
+        }
+      },
+      "required": [
+        "text"
+      ],
+      "title": "TextLocator",
+      "type": "object"
+    },
+    "TextVisible": {
+      "additionalProperties": false,
+      "description": "Visible text (exact substring, whitespace-normalised, case-insensitive) or a regex.\n\nA regex may define a named group ``message`` which is surfaced as the human-readable\nmessage of a business outcome (e.g. the validation error text).",
+      "properties": {
+        "kind": {
+          "const": "text_visible",
+          "default": "text_visible",
+          "title": "Kind",
+          "type": "string"
+        },
+        "text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Text"
+        },
+        "pattern": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pattern"
+        },
+        "frame": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FrameRef"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "TextVisible",
+      "type": "object"
+    },
+    "UrlMatches": {
+      "additionalProperties": false,
+      "description": "Frame URL path (query ignored - legacy apps put volatile session tokens there) matches a glob.",
+      "properties": {
+        "kind": {
+          "const": "url_matches",
+          "default": "url_matches",
+          "title": "Kind",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "frame": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FrameRef"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "path"
+      ],
+      "title": "UrlMatches",
+      "type": "object"
+    },
+    "VersionProbe": {
+      "additionalProperties": false,
+      "properties": {
+        "frame": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FrameRef"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "pattern": {
+          "description": "Regex with a named group 'version'.",
+          "title": "Pattern",
+          "type": "string"
+        }
+      },
+      "required": [
+        "pattern"
+      ],
+      "title": "VersionProbe",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "apiVersion": {
+      "const": "cua.dev/v1",
+      "default": "cua.dev/v1",
+      "title": "Apiversion",
+      "type": "string"
+    },
+    "kind": {
+      "const": "AppProfile",
+      "default": "AppProfile",
+      "title": "Kind",
+      "type": "string"
+    },
+    "metadata": {
+      "$ref": "#/$defs/AppProfileMetadata"
+    },
+    "spec": {
+      "$ref": "#/$defs/AppProfileSpec"
+    }
+  },
+  "required": [
+    "metadata",
+    "spec"
+  ],
+  "title": "AppProfile",
+  "type": "object"
+}

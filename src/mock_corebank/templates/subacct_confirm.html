@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block body %}
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr><td class="ttl"><font size="3"><b>Sub-Account Opened Successfully</b></font></td></tr>
+</table>
+<br>
+<table border="0" cellpadding="2" cellspacing="0">
+  <tr><td class="lbl">Confirmation Number:</td><td><b>{{ confirmation }}</b></td></tr>
+  <tr><td class="lbl">Member:</td><td>{{ member.member_number }}</td></tr>
+  <tr><td class="lbl">New Share Suffix:</td><td>{{ suffix }}</td></tr>
+  <tr><td class="lbl">Share Type:</td><td>{{ values.share_type_label }}</td></tr>
+  <tr><td class="lbl">Initial Deposit:</td><td>{{ values.deposit | money }}</td></tr>
+</table>
+<br>
+<input type="button" class="btn" value="Return to Member" onclick="location.href='mbr_detail.asp?m={{ member.member_number }}&sid={{ sid }}'">
+{% endblock %}

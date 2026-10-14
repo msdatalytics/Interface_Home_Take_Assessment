@@ -1,0 +1,48 @@
+<!-- http://127.0.0.1:8401/cb/mbr_search.asp?__EVENTTARGET=btnSearch&sid=a689d964d4f5&ctl00%24cph%24txtMbrNo=[param:member_id] -->
+<!DOCTYPE html>
+<html><head>
+<title>CoreBank</title>
+<style type="text/css">
+  body { font-family: Tahoma, Verdana, Arial, sans-serif; font-size: 11px; background: #ece9d8; margin: 6px; }
+  td { font-size: 11px; }
+  .lbl { color: #333; text-align: right; padding-right: 6px; white-space: nowrap; }
+  .hdr td { background: #d4d0c8; font-weight: bold; border-bottom: 1px solid #808080; }
+  .grid td { border: 1px solid #a0a0a0; padding: 2px 6px; }
+  .btn { font-size: 11px; padding: 1px 8px; }
+  .ttl { background: #1f3a5f; color: #fff; padding: 3px 6px; }
+</style>
+<script type="text/javascript">
+  function __doPostBack(target) {
+    var f = document.forms["aspnetForm"];
+    f.__EVENTTARGET.value = target;
+    f.submit();
+  }
+</script>
+</head>
+<body>
+
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tbody><tr><td class="ttl"><font size="3"><b>Member Inquiry</b></font></td></tr>
+</tbody></table>
+<br>
+<form name="aspnetForm" method="get" action="mbr_search.asp">
+<input type="hidden" name="__EVENTTARGET" value="" style="">
+<input type="hidden" name="sid" value="a095b62f8b4d" style="">
+<table border="0" cellpadding="3" cellspacing="0">
+  <tbody><tr>
+    <td class="lbl">Member Number:</td>
+    <td><input type="text" name="ctl00$cph$txtMbrNo" id="ctl00_cph_txtMbrNo" size="14" maxlength="12" value="[REDACTED]" onkeydown="if (event.keyCode == 13) { __doPostBack('btnSearch'); return false; }" style=""></td>
+    <td><input type="button" class="btn" value="Search" onclick="__doPostBack('btnSearch')" style=""></td>
+  </tr>
+</tbody></table>
+</form>
+
+<br>
+
+<font color="#990000">No records found matching the search criteria.</font>
+
+
+
+
+
+</body></html>

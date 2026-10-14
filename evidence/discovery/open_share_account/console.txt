@@ -1,0 +1,22 @@
+$ cua discover requests/open_share_account.yaml -t cu-alpha --escalation-timeout 180
+discovery corebank.member.open_share_account on cu-alpha with ollama:qwen3:8b
+
+[intervention] APPROVAL iv-30c09e55: Agent wants to click 'Continue' (irreversible): Submit the sub-account request -> http://127.0.0.1:8765/interventions/iv-30c09e55
+
+
+[intervention] APPROVAL iv-5e812ebc: Agent wants to click 'Submit' (irreversible): Submit the sub-account request to finalize the transaction. -> http://127.0.0.1:8765/interventions/iv-5e812ebc
+
+─────────────────────────── COMPLETED after 13 turns ───────────────────────────
+reason:   New sub-account opened for member  with confirmation number CB-48219
+run:      20261014T024912Z-discovery-8233a7
+usage:    {'input_tokens': 24501, 'output_tokens': 6489}
+artifact: 
+capabilities/meridian_corebank/corebank
+.member.open_share_account.yaml
+[exit 0]
+
+--- simulated operator (scripts/operator_bot.py) ---
+operator: approval iv-30c09e55: Agent wants to click 'Continue' (irreversible): Submit the sub-account request
+operator: resolved iv-30c09e55 -> approve
+operator: approval iv-5e812ebc: Agent wants to click 'Submit' (irreversible): Submit the sub-account request to finalize the transaction.
+operator: resolved iv-5e812ebc -> approve

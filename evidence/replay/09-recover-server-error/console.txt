@@ -1,0 +1,10 @@
+$ cua replay corebank.member.get_savings_balance -p member_id=100234 --escalation-timeout 180
+─────── SUCCEEDED corebank.member.get_savings_balance@1.0.0 on cu-alpha ────────
+ run                     20261014T025654Z-replay-159061                         
+ duration                4605 ms                                                
+ app version             4.2.1                                                  
+ output.savings_balance  2481.37                                                
+ recovery                server_runtime_error @ click_link_view (attempt 1):    
+                         reloaded frame[name=main]                              
+ evidence                runs/20261014T025654Z-replay-159061
+[exit 0]

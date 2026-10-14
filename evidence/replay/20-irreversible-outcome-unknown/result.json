@@ -1,0 +1,128 @@
+{
+  "run_id": "20261014T025802Z-replay-b9c471",
+  "capability": "corebank.member.open_share_account@1.0.0",
+  "digest": "sha256:d559eff9c55eb9856e881e0ba66a6b559f4830574b5ce0d5fd6b7d65b71510ce",
+  "tenant": "cu-alpha",
+  "tenant_overrides": [],
+  "status": "failed",
+  "outputs": {},
+  "failure": {
+    "code": "OUTCOME_UNKNOWN",
+    "category": "application",
+    "message": "application error after a state-changing action - the transaction may or may not have been committed; verify before retrying",
+    "retryable": false,
+    "step_id": "click_button_submit",
+    "step_index": 10,
+    "locator_attempts": [],
+    "evidence": {
+      "screenshot": "0028-failure-click_button_submit.png",
+      "dom": [
+        "dom-failure-click_button_submit/frame-0-top.html",
+        "dom-failure-click_button_submit/frame-1-banner.html",
+        "dom-failure-click_button_submit/frame-2-nav.html",
+        "dom-failure-click_button_submit/frame-3-main.html"
+      ],
+      "observation": "observation-failure-click_button_submit.txt"
+    }
+  },
+  "recoveries": [],
+  "drift": [],
+  "interventions": [],
+  "steps": [
+    {
+      "id": "click_link_sub_account_maintenance",
+      "title": "Click link Sub-Account Maintenance",
+      "status": "ok",
+      "risk": "read",
+      "strategy": "role",
+      "duration_ms": 378,
+      "screenshot": "0007-step-click_link_sub_account_maintenance.png"
+    },
+    {
+      "id": "fill_textbox_member_number",
+      "title": "Enter textbox Member Number",
+      "status": "ok",
+      "risk": "read",
+      "strategy": "label",
+      "duration_ms": 356,
+      "screenshot": "0009-step-fill_textbox_member_number.png"
+    },
+    {
+      "id": "click_button_search",
+      "title": "Click button Search",
+      "status": "ok",
+      "risk": "read",
+      "strategy": "role",
+      "duration_ms": 435,
+      "screenshot": "0011-step-click_button_search.png"
+    },
+    {
+      "id": "click_link_view",
+      "title": "Click link View",
+      "status": "ok",
+      "risk": "read",
+      "strategy": "role",
+      "duration_ms": 452,
+      "screenshot": "0013-step-click_link_view.png"
+    },
+    {
+      "id": "click_button_open_sub_account",
+      "title": "Click button Open Sub-Account",
+      "status": "ok",
+      "risk": "read",
+      "strategy": "role",
+      "duration_ms": 445,
+      "screenshot": "0015-step-click_button_open_sub_account.png"
+    },
+    {
+      "id": "select_combobox_share_type",
+      "title": "Choose combobox Share Type",
+      "status": "ok",
+      "risk": "read",
+      "strategy": "label",
+      "duration_ms": 370,
+      "screenshot": "0017-step-select_combobox_share_type.png"
+    },
+    {
+      "id": "fill_textbox_nickname",
+      "title": "Enter textbox Nickname",
+      "status": "ok",
+      "risk": "read",
+      "strategy": "label",
+      "duration_ms": 365,
+      "screenshot": "0019-step-fill_textbox_nickname.png"
+    },
+    {
+      "id": "fill_textbox_initial_deposit",
+      "title": "Enter textbox Initial Deposit",
+      "status": "ok",
+      "risk": "read",
+      "strategy": "label",
+      "duration_ms": 368,
+      "screenshot": "0021-step-fill_textbox_initial_deposit.png"
+    },
+    {
+      "id": "select_combobox_funding_source",
+      "title": "Choose combobox Funding Source",
+      "status": "ok",
+      "risk": "read",
+      "strategy": "label",
+      "duration_ms": 368,
+      "screenshot": "0023-step-select_combobox_funding_source.png"
+    },
+    {
+      "id": "click_button_continue",
+      "title": "Click button Continue",
+      "status": "ok",
+      "risk": "irreversible",
+      "strategy": "role",
+      "duration_ms": 447,
+      "screenshot": "0025-step-click_button_continue.png"
+    }
+  ],
+  "human_assisted": false,
+  "app_version": "4.2.1",
+  "started_at": "2026-10-14T02:58:03.028745Z",
+  "duration_ms": 5915,
+  "evidence_dir": "runs/20261014T025802Z-replay-b9c471"
+}

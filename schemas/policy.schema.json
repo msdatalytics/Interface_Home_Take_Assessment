@@ -1,0 +1,159 @@
+{
+  "$defs": {
+    "ActionType": {
+      "enum": [
+        "navigate",
+        "click",
+        "fill",
+        "select",
+        "press",
+        "extract"
+      ],
+      "title": "ActionType",
+      "type": "string"
+    },
+    "PolicySpec": {
+      "additionalProperties": false,
+      "properties": {
+        "allowed_origins": {
+          "description": "Origins the automation may load. The token '{tenant}' expands to the tenant app origin.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Allowed Origins",
+          "type": "array"
+        },
+        "allowed_paths": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Allowed Paths",
+          "type": "array"
+        },
+        "denied_paths": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Denied Paths",
+          "type": "array"
+        },
+        "allowed_actions": {
+          "items": {
+            "$ref": "#/$defs/ActionType"
+          },
+          "title": "Allowed Actions",
+          "type": "array"
+        },
+        "irreversible_keywords": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Irreversible Keywords",
+          "type": "array"
+        },
+        "write_keywords": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Write Keywords",
+          "type": "array"
+        },
+        "discovery": {
+          "$ref": "#/$defs/RiskRules"
+        },
+        "replay": {
+          "$ref": "#/$defs/RiskRules"
+        },
+        "redaction": {
+          "$ref": "#/$defs/RedactionSpec"
+        }
+      },
+      "required": [
+        "allowed_origins"
+      ],
+      "title": "PolicySpec",
+      "type": "object"
+    },
+    "RedactionSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "patterns": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "name -> regex of values to mask anywhere.",
+          "title": "Patterns",
+          "type": "object"
+        },
+        "sensitive_labels": {
+          "description": "Regexes on field labels whose *values* are masked (e.g. 'SSN', 'Date of Birth').",
+          "items": {
+            "type": "string"
+          },
+          "title": "Sensitive Labels",
+          "type": "array"
+        },
+        "screenshot_to_llm": {
+          "default": false,
+          "description": "Send screenshots to the model. Off by default: pixels cannot be redacted reliably.",
+          "title": "Screenshot To Llm",
+          "type": "boolean"
+        }
+      },
+      "title": "RedactionSpec",
+      "type": "object"
+    },
+    "RiskRule": {
+      "enum": [
+        "allow",
+        "require_human_approval",
+        "require_approved_artifact",
+        "deny"
+      ],
+      "title": "RiskRule",
+      "type": "string"
+    },
+    "RiskRules": {
+      "additionalProperties": false,
+      "properties": {
+        "read": {
+          "$ref": "#/$defs/RiskRule",
+          "default": "allow"
+        },
+        "write": {
+          "$ref": "#/$defs/RiskRule",
+          "default": "allow"
+        },
+        "irreversible": {
+          "$ref": "#/$defs/RiskRule",
+          "default": "require_human_approval"
+        }
+      },
+      "title": "RiskRules",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "apiVersion": {
+      "const": "cua.dev/v1",
+      "default": "cua.dev/v1",
+      "title": "Apiversion",
+      "type": "string"
+    },
+    "kind": {
+      "const": "Policy",
+      "default": "Policy",
+      "title": "Kind",
+      "type": "string"
+    },
+    "spec": {
+      "$ref": "#/$defs/PolicySpec"
+    }
+  },
+  "required": [
+    "spec"
+  ],
+  "title": "PolicyDocument",
+  "type": "object"
+}

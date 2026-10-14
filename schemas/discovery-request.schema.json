@@ -1,0 +1,263 @@
+{
+  "$defs": {
+    "DiscoveryRequestMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)+$",
+          "title": "Name",
+          "type": "string"
+        },
+        "version": {
+          "default": "1.0.0",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "title": "Version",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        }
+      },
+      "required": [
+        "name",
+        "title",
+        "description"
+      ],
+      "title": "DiscoveryRequestMetadata",
+      "type": "object"
+    },
+    "DiscoveryRequestSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "app": {
+          "title": "App",
+          "type": "string"
+        },
+        "goal": {
+          "description": "Natural-language goal. '{input_name}' placeholders refer to inputs.",
+          "title": "Goal",
+          "type": "string"
+        },
+        "inputs": {
+          "items": {
+            "$ref": "#/$defs/InputSpec"
+          },
+          "title": "Inputs",
+          "type": "array"
+        },
+        "outputs": {
+          "items": {
+            "$ref": "#/$defs/OutputSpec"
+          },
+          "title": "Outputs",
+          "type": "array"
+        },
+        "values": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Synthetic input values used for this discovery run (never real customer data).",
+          "title": "Values",
+          "type": "object"
+        },
+        "max_steps": {
+          "default": 30,
+          "maximum": 100,
+          "minimum": 3,
+          "title": "Max Steps",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "app",
+        "goal"
+      ],
+      "title": "DiscoveryRequestSpec",
+      "type": "object"
+    },
+    "InputSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "pattern": "^[a-z][a-z0-9_]{0,63}$",
+          "title": "Name",
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/$defs/ValueType"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "required": {
+          "default": true,
+          "title": "Required",
+          "type": "boolean"
+        },
+        "sensitivity": {
+          "$ref": "#/$defs/Sensitivity",
+          "default": "internal"
+        },
+        "pattern": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Regex the value must fully match.",
+          "title": "Pattern"
+        },
+        "enum": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Enum"
+        },
+        "max_length": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Length"
+        },
+        "example": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Synthetic example only - never real data.",
+          "title": "Example"
+        }
+      },
+      "required": [
+        "name",
+        "type",
+        "description"
+      ],
+      "title": "InputSpec",
+      "type": "object"
+    },
+    "OutputSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "pattern": "^[a-z][a-z0-9_]{0,63}$",
+          "title": "Name",
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/$defs/ValueType"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "sensitivity": {
+          "$ref": "#/$defs/Sensitivity",
+          "default": "internal"
+        },
+        "required": {
+          "default": true,
+          "title": "Required",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "name",
+        "type",
+        "description"
+      ],
+      "title": "OutputSpec",
+      "type": "object"
+    },
+    "Sensitivity": {
+      "description": "Data classification driving redaction in logs, evidence and LLM prompts.",
+      "enum": [
+        "public",
+        "internal",
+        "confidential",
+        "pii",
+        "secret"
+      ],
+      "title": "Sensitivity",
+      "type": "string"
+    },
+    "ValueType": {
+      "enum": [
+        "string",
+        "integer",
+        "decimal",
+        "money",
+        "date",
+        "boolean",
+        "enum"
+      ],
+      "title": "ValueType",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "apiVersion": {
+      "const": "cua.dev/v1",
+      "default": "cua.dev/v1",
+      "title": "Apiversion",
+      "type": "string"
+    },
+    "kind": {
+      "const": "DiscoveryRequest",
+      "default": "DiscoveryRequest",
+      "title": "Kind",
+      "type": "string"
+    },
+    "metadata": {
+      "$ref": "#/$defs/DiscoveryRequestMetadata"
+    },
+    "spec": {
+      "$ref": "#/$defs/DiscoveryRequestSpec"
+    }
+  },
+  "required": [
+    "metadata",
+    "spec"
+  ],
+  "title": "DiscoveryRequest",
+  "type": "object"
+}
